@@ -5,29 +5,29 @@ namespace POSWEB.Server.Entitites
 {
 
     [Table("Products", Schema = "product")]
-    public class Product : IBaseEntity
+    public class Product : BaseEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key, Column(Order = 0)]
-        public required uint ProductId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public required uint Id { get; set; }
         public required string ProductName { get; set; }
         public required string ProductCode
         {
             get { return ProductCode; }
             set
             {
-                var range = ProductId / 10;
+                var range = Id / 10;
 
                 if (range == 0)
-                    ProductCode = $"P-0000{ProductId}";//P-00099
+                    ProductCode = $"P-0000{Id}";//P-00099
                 else if (range <= 9)
-                    ProductCode = $"P-000{ProductId}";//P-00099
+                    ProductCode = $"P-000{Id}";//P-00099
                 else if (range <= 99)
-                    ProductCode = $"P-00{ProductId}"; //P-00999
+                    ProductCode = $"P-00{Id}"; //P-00999
                 else if (range <= 999)
-                    ProductCode = $"P-0{ProductId}"; //P-09999
+                    ProductCode = $"P-0{Id}"; //P-09999
                 else
-                    ProductCode = $"P-{ProductId}"; //P-99999
+                    ProductCode = $"P-{Id}"; //P-99999
             }
         }
         public string CustomBarcode { get; set; } = string.Empty;
@@ -48,10 +48,6 @@ namespace POSWEB.Server.Entitites
         [NotMapped]
         public string Status => IsActive ? "Active" : "Inactive";
 
-        public required User CreatedBy { get; set; }
-        public DateTime CreatedTime { get; set; }
-        public User? LastUpdatedBy { get; set; }
-        public DateTime? LastUpdatedTime { get; set; }
     }
 
 

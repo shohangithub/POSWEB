@@ -12,8 +12,8 @@ using POSWEB.Server.Context;
 namespace POSWEB.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231231081557_check circular dependecy")]
-    partial class checkcirculardependecy
+    [Migration("20231231090927_init db")]
+    partial class initdb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,14 +27,18 @@ namespace POSWEB.Server.Migrations
 
             modelBuilder.Entity("POSWEB.Server.Entitites.Product", b =>
                 {
-                    b.Property<long>("ProductId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnOrder(0);
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ProductId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedTime")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CustomBarcode")
@@ -50,10 +54,13 @@ namespace POSWEB.Server.Migrations
                     b.Property<bool>("IsRawMaterial")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("LastUpdatedById")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("LastUpdatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<short>("ProductCategoryCategoryId")
+                    b.Property<short>("ProductCategoryId")
                         .HasColumnType("smallint");
 
                     b.Property<string>("ProductCode")
@@ -64,14 +71,8 @@ namespace POSWEB.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<short>("ProductUnitUnitId")
+                    b.Property<short>("ProductUnitId")
                         .HasColumnType("smallint");
-
-                    b.Property<int>("ProductsCreated")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProductsUpdated")
-                        .HasColumnType("int");
 
                     b.Property<decimal?>("PurchaseRate")
                         .HasColumnType("decimal(10, 2)");
@@ -88,33 +89,37 @@ namespace POSWEB.Server.Migrations
                     b.Property<decimal?>("WholesalePrice")
                         .HasColumnType("decimal(10, 2)");
 
-                    b.HasKey("ProductId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("ProductCategoryCategoryId");
+                    b.HasIndex("CreatedById");
 
-                    b.HasIndex("ProductUnitUnitId");
+                    b.HasIndex("LastUpdatedById");
 
-                    b.HasIndex("ProductsCreated");
+                    b.HasIndex("ProductCategoryId");
 
-                    b.HasIndex("ProductsUpdated");
+                    b.HasIndex("ProductUnitId");
 
                     b.ToTable("Products", "product");
                 });
 
             modelBuilder.Entity("POSWEB.Server.Entitites.ProductCategory", b =>
                 {
-                    b.Property<short>("CategoryId")
+                    b.Property<short>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("smallint")
                         .HasColumnOrder(0);
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("CategoryId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedTime")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -124,32 +129,36 @@ namespace POSWEB.Server.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("LastUpdatedById")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("LastUpdatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProductCategoriesCreated")
-                        .HasColumnType("int");
+                    b.HasKey("Id");
 
-                    b.Property<int?>("ProductCategoriesUpdated")
-                        .HasColumnType("int");
+                    b.HasIndex("CreatedById");
 
-                    b.HasKey("CategoryId");
-
-                    b.HasIndex("ProductCategoriesCreated");
-
-                    b.HasIndex("ProductCategoriesUpdated");
+                    b.HasIndex("LastUpdatedById");
 
                     b.ToTable("ProductCategories", "product");
                 });
 
             modelBuilder.Entity("POSWEB.Server.Entitites.ProductUnit", b =>
                 {
-                    b.Property<short>("UnitId")
+                    b.Property<short>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("smallint")
                         .HasColumnOrder(0);
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("UnitId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
+
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -158,23 +167,33 @@ namespace POSWEB.Server.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("LastUpdatedById")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastUpdatedTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("UnitName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UnitId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("LastUpdatedById");
 
                     b.ToTable("ProductUnits", "lookup");
                 });
 
             modelBuilder.Entity("POSWEB.Server.Entitites.User", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnOrder(0);
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -183,35 +202,35 @@ namespace POSWEB.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
                     b.ToTable("Users", "user");
                 });
 
             modelBuilder.Entity("POSWEB.Server.Entitites.Product", b =>
                 {
-                    b.HasOne("POSWEB.Server.Entitites.ProductCategory", "ProductCategory")
-                        .WithMany("Products")
-                        .HasForeignKey("ProductCategoryCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("POSWEB.Server.Entitites.ProductUnit", "ProductUnit")
-                        .WithMany("Products")
-                        .HasForeignKey("ProductUnitUnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("POSWEB.Server.Entitites.User", "CreatedBy")
                         .WithMany("ProductsCreated")
-                        .HasForeignKey("ProductsCreated")
+                        .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("POSWEB.Server.Entitites.User", "LastUpdatedBy")
                         .WithMany("ProductsUpdated")
-                        .HasForeignKey("ProductsUpdated")
+                        .HasForeignKey("LastUpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("POSWEB.Server.Entitites.ProductCategory", "ProductCategory")
+                        .WithMany("Products")
+                        .HasForeignKey("ProductCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("POSWEB.Server.Entitites.ProductUnit", "ProductUnit")
+                        .WithMany("Products")
+                        .HasForeignKey("ProductUnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CreatedBy");
 
@@ -226,13 +245,31 @@ namespace POSWEB.Server.Migrations
                 {
                     b.HasOne("POSWEB.Server.Entitites.User", "CreatedBy")
                         .WithMany("ProductCategoriesCreated")
-                        .HasForeignKey("ProductCategoriesCreated")
+                        .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("POSWEB.Server.Entitites.User", "LastUpdatedBy")
                         .WithMany("ProductCategoriesUpdated")
-                        .HasForeignKey("ProductCategoriesUpdated")
+                        .HasForeignKey("LastUpdatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("LastUpdatedBy");
+                });
+
+            modelBuilder.Entity("POSWEB.Server.Entitites.ProductUnit", b =>
+                {
+                    b.HasOne("POSWEB.Server.Entitites.User", "CreatedBy")
+                        .WithMany("ProductUnitsCreated")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("POSWEB.Server.Entitites.User", "LastUpdatedBy")
+                        .WithMany("ProductUnitsUpdated")
+                        .HasForeignKey("LastUpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("CreatedBy");
@@ -255,6 +292,10 @@ namespace POSWEB.Server.Migrations
                     b.Navigation("ProductCategoriesCreated");
 
                     b.Navigation("ProductCategoriesUpdated");
+
+                    b.Navigation("ProductUnitsCreated");
+
+                    b.Navigation("ProductUnitsUpdated");
 
                     b.Navigation("ProductsCreated");
 

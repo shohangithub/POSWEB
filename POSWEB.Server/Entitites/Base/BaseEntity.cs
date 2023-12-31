@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace POSWEB.Server.Entitites;
 
 public interface IBaseEntity
@@ -11,8 +12,11 @@ public interface IBaseEntity
 
 public class BaseEntity
 {
+    public required int CreatedById { get; set; }
     public required User CreatedBy { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTime CreatedTime { get; set; }
+    public int? LastUpdatedById { get; set; }
     public User? LastUpdatedBy { get; set; }
     public DateTime? LastUpdatedTime { get; set; }
 }

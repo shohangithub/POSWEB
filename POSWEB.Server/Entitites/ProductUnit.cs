@@ -3,11 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace POSWEB.Server.Entitites;
 
-[Table("ProductUnits",Schema ="lookup")]
-public class ProductUnit
+[Table("ProductUnits", Schema = "lookup")]
+public class ProductUnit : BaseEntity
 {
     [Key, Column(Order = 0)]
-    public short UnitId { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public short Id { get; set; }
     public required string UnitName { get; set; }
     public string Description { get; set; } = string.Empty;
     public required bool IsActive { get; set; }

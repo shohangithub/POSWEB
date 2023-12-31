@@ -20,11 +20,15 @@ namespace POSWEB.Server.Context
         {
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasMany(x => x.ProductsCreated).WithOne(x => x.CreatedBy).HasForeignKey("ProductsCreated").IsRequired().OnDelete(DeleteBehavior.Restrict);
-                entity.HasMany(x => x.ProductsUpdated).WithOne(x => x.LastUpdatedBy).HasForeignKey("ProductsUpdated").IsRequired(false).OnDelete(DeleteBehavior.Restrict);
+                entity.HasMany(x => x.ProductsCreated).WithOne(x => x.CreatedBy).HasForeignKey(x => x.CreatedById).IsRequired().OnDelete(DeleteBehavior.Restrict);
+                entity.HasMany(x => x.ProductsUpdated).WithOne(x => x.LastUpdatedBy).HasForeignKey(x => x.LastUpdatedById).IsRequired(false).OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasMany(x => x.ProductCategoriesCreated).WithOne(x => x.CreatedBy).HasForeignKey("ProductCategoriesCreated").IsRequired().OnDelete(DeleteBehavior.Restrict);
-                entity.HasMany(x => x.ProductCategoriesUpdated).WithOne(x => x.LastUpdatedBy).HasForeignKey("ProductCategoriesUpdated").IsRequired(false).OnDelete(DeleteBehavior.Restrict);
+                entity.HasMany(x => x.ProductUnitsCreated).WithOne(x => x.CreatedBy).HasForeignKey(x => x.CreatedById).IsRequired().OnDelete(DeleteBehavior.Restrict);
+                entity.HasMany(x => x.ProductUnitsUpdated).WithOne(x => x.LastUpdatedBy).HasForeignKey(x => x.LastUpdatedById).IsRequired(false).OnDelete(DeleteBehavior.Restrict);
+
+
+                entity.HasMany(x => x.ProductCategoriesCreated).WithOne(x => x.CreatedBy).HasForeignKey(x => x.CreatedById).IsRequired().OnDelete(DeleteBehavior.Restrict);
+                entity.HasMany(x => x.ProductCategoriesUpdated).WithOne(x => x.LastUpdatedBy).HasForeignKey(x => x.LastUpdatedById).IsRequired(false).OnDelete(DeleteBehavior.Restrict);
             });
 
             //    modelBuilder.Entity<User>().HasMany(e => e.Products).WithOne(x => x.CreatedBy).HasForeignKey("UserId").IsRequired(true);
