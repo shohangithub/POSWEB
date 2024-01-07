@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using POSWEB.Server.Context;
+using POSWEB.Server.GraphQLSchema;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
   options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationDbContext")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+#endregion
+
+#region register graphql services
+
+
+
+builder.Services.AddGraphQLServer()
+                .AddQueryType<Query>()
+                .AddMutationType<Mutations>();
 
 #endregion
 
@@ -46,8 +57,16 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+
+app.UseCors(builder => builder
+     .AllowAnyOrigin()
+     .AllowAnyMethod()
+     .AllowAnyHeader());
+
+
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
+app.MapGraphQL();
 
 app.Run();

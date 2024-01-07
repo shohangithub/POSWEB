@@ -12,8 +12,8 @@ using POSWEB.Server.Context;
 namespace POSWEB.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231231090927_init db")]
-    partial class initdb
+    [Migration("20240107173356_init database")]
+    partial class initdatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,19 +27,19 @@ namespace POSWEB.Server.Migrations
 
             modelBuilder.Entity("POSWEB.Server.Entitites.Product", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("int")
                         .HasColumnOrder(0);
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CreatedById")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedTime")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("CustomBarcode")
                         .IsRequired()
@@ -77,8 +77,8 @@ namespace POSWEB.Server.Migrations
                     b.Property<decimal?>("PurchaseRate")
                         .HasColumnType("decimal(10, 2)");
 
-                    b.Property<long?>("ReOrederLevel")
-                        .HasColumnType("bigint");
+                    b.Property<int?>("ReOrederLevel")
+                        .HasColumnType("int");
 
                     b.Property<decimal?>("SellingRate")
                         .HasColumnType("decimal(10, 2)");
@@ -120,10 +120,9 @@ namespace POSWEB.Server.Migrations
 
                     b.Property<DateTime>("CreatedTime")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -158,7 +157,7 @@ namespace POSWEB.Server.Migrations
 
                     b.Property<DateTime>("CreatedTime")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Description")
                         .IsRequired()

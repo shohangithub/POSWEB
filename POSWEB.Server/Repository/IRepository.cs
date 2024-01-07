@@ -5,9 +5,9 @@
         IQueryable<T> Query();
         ValueTask<T?> GetByIdAsync(int id, CancellationToken cancellationToken);
         IEnumerable<T> GetAll();
-        void Add(T entity);
-        void Update(T entity);
-        void Delete(T entity);
+        ValueTask AddAsync(T entity, CancellationToken cancellationToken);
+        ValueTask UpdateAsync(T entity, CancellationToken cancellationToken);
+        ValueTask DeleteAsync(T entity);
         void Delete(params T[] entities);
     }
 }

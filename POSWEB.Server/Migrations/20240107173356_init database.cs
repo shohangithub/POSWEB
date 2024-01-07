@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace POSWEB.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class initdb : Migration
+    public partial class initdatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -43,10 +43,10 @@ namespace POSWEB.Server.Migrations
                     Id = table.Column<short>(type: "smallint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedById = table.Column<int>(type: "int", nullable: false),
-                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastUpdatedById = table.Column<int>(type: "int", nullable: true),
                     LastUpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -80,7 +80,7 @@ namespace POSWEB.Server.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedById = table.Column<int>(type: "int", nullable: false),
-                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastUpdatedById = table.Column<int>(type: "int", nullable: true),
                     LastUpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -108,7 +108,7 @@ namespace POSWEB.Server.Migrations
                 schema: "product",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -117,14 +117,14 @@ namespace POSWEB.Server.Migrations
                     ProductUnitId = table.Column<short>(type: "smallint", nullable: false),
                     IsRawMaterial = table.Column<bool>(type: "bit", nullable: false),
                     IsFinishedGoods = table.Column<bool>(type: "bit", nullable: false),
-                    ReOrederLevel = table.Column<long>(type: "bigint", nullable: true),
+                    ReOrederLevel = table.Column<int>(type: "int", nullable: true),
                     PurchaseRate = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
                     SellingRate = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
                     WholesalePrice = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
                     VatPercent = table.Column<decimal>(type: "decimal(3,2)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedById = table.Column<int>(type: "int", nullable: false),
-                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastUpdatedById = table.Column<int>(type: "int", nullable: true),
                     LastUpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },

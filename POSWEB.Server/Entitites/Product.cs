@@ -9,7 +9,7 @@ namespace POSWEB.Server.Entitites
     {
         [Key, Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public required uint Id { get; set; }
+        public required int Id { get; set; }
         public required string ProductName { get; set; }
         public required string ProductCode
         {
@@ -35,7 +35,7 @@ namespace POSWEB.Server.Entitites
         public required ProductUnit ProductUnit { get; set; }
         public required bool IsRawMaterial { get; set; }
         public required bool IsFinishedGoods { get; set; }
-        public uint? ReOrederLevel { get; set; }
+        public int? ReOrederLevel { get; set; }
         [Column(TypeName = "decimal(10, 2)")]
         public decimal? PurchaseRate { get; set; }
         [Column(TypeName = "decimal(10, 2)")]

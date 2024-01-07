@@ -18,7 +18,7 @@ namespace POSWEB.Server.Services
             _context = context;
         }
 
-        public async Task<List<Product>> ProductListAsync()
+        public async ValueTask<List<Product>> ProductListAsync()
         {
             return await _context.Products.ToListAsync();
         }
@@ -44,7 +44,7 @@ namespace POSWEB.Server.Services
                         .SetProperty(x => x.IsActive, product.IsActive)
                         .SetProperty(x => x.IsFinishedGoods, product.IsFinishedGoods)
                         .SetProperty(x => x.IsRawMaterial, product.IsRawMaterial)
-                        .SetProperty(x => x.LastUpdatedById, product.CreatedById)
+                        //.SetProperty(x => x.LastUpdatedById, product.CreatedById)
                         .SetProperty(x => x.LastUpdatedTime, DateTime.UtcNow)
            );
 
@@ -77,7 +77,7 @@ namespace POSWEB.Server.Services
             var result = _context.Products.Where(x => x.Id == id).ExecuteDelete();
             return result > 0;
         }
-        public async ValueTask<bool> DeleteAsync(params uint[] ids)
+        public async ValueTask<bool> DeleteAsync(params int[] ids)
         {
             var result = Task.Run(() =>
             {

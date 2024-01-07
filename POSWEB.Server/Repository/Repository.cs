@@ -33,16 +33,33 @@ namespace POSWEB.Server.Repository
         public async ValueTask UpdateAsync(T entity, CancellationToken cancellationToken = default)
         {
             _context.Entry(entity).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(T entity)
+        public async ValueTask DeleteAsync(T entity)
         {
             _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
         }
         public void Delete(params T[] entities)
         {
             _dbSet.RemoveRange(entities);
             _context.SaveChanges();
+        }
+
+        public IEnumerable<T> GetAll()
+        {
+           return _dbSet.ToList();
+        }
+
+        public void Add(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(T entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }
