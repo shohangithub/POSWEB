@@ -1,15 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using System.Net.Mail;
 
 namespace POSWEB.Server.Entitites
 {
     [Table("Users", Schema = "user")]
+    [Index(nameof(Email), IsUnique = true)]
     public class User
     {
         [Key, Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public required string UserName { get; set; }
+        [EmailAddress(ErrorMessage="Invalid email address")]
+        public required string Email { get; set; }
         public required bool IsActive { get; set; }
         [NotMapped]
         public string Status => IsActive ? "Active" : "Inactive";

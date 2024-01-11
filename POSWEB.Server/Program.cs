@@ -1,8 +1,19 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using POSWEB.Server.Authentication;
+using POSWEB.Server.Authentication.OptionSetup;
 using POSWEB.Server.Context;
+using POSWEB.Server.Entitites;
 using POSWEB.Server.GraphQLSchema;
+using POSWEB.Server.ServiceContracts;
+using POSWEB.Server.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 
 // Add services to the container.
@@ -24,10 +35,44 @@ builder.Services.AddGraphQLServer()
 
 #endregion
 
+
+#region register business services
+builder.Services.AddScoped<IUserService, UserService>();
+#endregion
+
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+#region JWT configuration
+builder.Services.ConfigureOptions<ConfigureJwtOptions>();
+//Jwt configuration starts here
+var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
+var jwtKey = builder.Configuration.GetSection("Jwt:SecretKey").Get<string>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+ .AddJwtBearer(options =>
+ {
+     options.TokenValidationParameters = new TokenValidationParameters()
+     {
+         ValidateIssuer = true,
+         ValidateAudience = true,
+         ValidateLifetime = true,
+         ValidateIssuerSigningKey = true,
+         ValidIssuer = jwtIssuer,
+         ValidAudience = jwtIssuer,
+         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+     };
+ });
+
+
+builder.Services.AddTransient<IJwtProvider, JwtProvider>();
+
+
+#endregion
 
 var app = builder.Build();
 
@@ -55,6 +100,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 
