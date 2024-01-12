@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using POSWEB.Server.Authentication;
 using POSWEB.Server.ServiceContracts;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace POSWEB.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiKey]
     public class LoginController : ControllerBase
     {
         private IConfiguration _config;

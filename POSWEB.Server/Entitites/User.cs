@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
+using POSWEB.Server.Authentication;
 
 namespace POSWEB.Server.Entitites
 {
@@ -15,6 +16,7 @@ namespace POSWEB.Server.Entitites
         public required string UserName { get; set; }
         [EmailAddress(ErrorMessage="Invalid email address")]
         public required string Email { get; set; }
+        public Roles Role { get; set; }
         public required bool IsActive { get; set; }
         [NotMapped]
         public string Status => IsActive ? "Active" : "Inactive";

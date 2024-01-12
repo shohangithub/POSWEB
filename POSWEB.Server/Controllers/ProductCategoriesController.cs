@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using POSWEB.Server.Authentication;
 using POSWEB.Server.Context;
 using POSWEB.Server.Entitites;
 
@@ -26,7 +27,7 @@ namespace POSWEB.Server.Controllers
 
         // GET: api/ProductCategories
 
-        [Authorize]
+        [Permission(Roles.Standard)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductCategory>>> GetProductCategories()
         {
@@ -89,7 +90,7 @@ namespace POSWEB.Server.Controllers
                 CreatedById = 1,
                 IsActive = true,
                 Description = productCategory.Description,
-                 CreatedTime = DateTime.UtcNow,
+                CreatedTime = DateTime.UtcNow,
             };
             _context.ProductCategories.Add(entity);
             await _context.SaveChangesAsync();

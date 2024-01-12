@@ -1,7 +1,8 @@
-﻿namespace POSWEB.Server.Authentication
+﻿using POSWEB.Server.Entitites;
+
+namespace POSWEB.Server.Authentication;
+
+public interface IJwtProvider
 {
-    public interface IJwtProvider
-    {
-        string Generate(string Email);
-    }
+    string Generate(User user);
 }

@@ -8,6 +8,7 @@
     <SpaRoot>..\posweb.client</SpaRoot>
     <SpaProxyLaunchCommand>ng serve --o</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:4200</SpaProxyServerUrl>
+    <UserSecretsId>a84d0f59-2303-43fa-bb5a-ece6ebfae4d1</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

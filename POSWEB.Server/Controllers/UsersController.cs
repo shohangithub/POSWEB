@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using POSWEB.Server.Authentication;
 using POSWEB.Server.Context;
 using POSWEB.Server.Entitites;
 
@@ -12,6 +8,7 @@ namespace POSWEB.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiKey]
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

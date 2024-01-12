@@ -39,7 +39,7 @@ namespace POSWEB.Server.Services
             var user = await GetByEmailAsync(email, cancellationToken);
             if (user is null) throw new Exception("User not found !");
 
-            var token = _jwtProvider.Generate(email);
+            var token = _jwtProvider.Generate(user);
             return token;
         }
         public async ValueTask<bool> AddAsync(User user)
