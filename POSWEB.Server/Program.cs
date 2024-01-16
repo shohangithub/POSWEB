@@ -11,30 +11,34 @@ using POSWEB.Server.Entitites;
 using POSWEB.Server.GraphQLSchema;
 using POSWEB.Server.ServiceContracts;
 using POSWEB.Server.Services;
-using System.Text;
+using POSWEB.Server;
+using Infrastructure;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddPresentation()
+    //.AddApplication()
+        .AddInfrastructure(builder.Configuration);
+
+//// Add services to the container.
+//#region register db context provider
+
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//  options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationDbContext")));
+//builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+//#endregion
+
+//#region register graphql services
 
 
-// Add services to the container.
-#region register db context provider
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-  options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationDbContext")));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+//builder.Services.AddGraphQLServer()
+//                .AddQueryType<Query>()
+//                .AddMutationType<Mutations>();
 
-#endregion
-
-#region register graphql services
-
-
-
-builder.Services.AddGraphQLServer()
-                .AddQueryType<Query>()
-                .AddMutationType<Mutations>();
-
-#endregion
+//#endregion
 
 
 #region register business services
@@ -48,38 +52,38 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-#region JWT configuration
-builder.Services.ConfigureOptions<ConfigureJwtOptions>();
-//Jwt configuration starts here
-var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
-var jwtKey = builder.Configuration.GetSection("Jwt:SecretKey").Get<string>();
+//#region JWT configuration
+//builder.Services.ConfigureOptions<ConfigureJwtOptions>();
+////Jwt configuration starts here
+//var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
+//var jwtKey = builder.Configuration.GetSection("Jwt:SecretKey").Get<string>();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
- .AddJwtBearer(options =>
- {
-     options.TokenValidationParameters = new TokenValidationParameters()
-     {
-         ValidateIssuer = true,
-         ValidateAudience = true,
-         ValidateLifetime = true,
-         ValidateIssuerSigningKey = true,
-         ValidIssuer = jwtIssuer,
-         ValidAudience = jwtIssuer,
-         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-     };
- });
-
-
-
-builder.Services.AddTransient<IJwtProvider, JwtProvider>();
-
-//register authorization handler
-builder.Services.AddAuthorization();
-builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
-builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+// .AddJwtBearer(options =>
+// {
+//     options.TokenValidationParameters = new TokenValidationParameters()
+//     {
+//         ValidateIssuer = true,
+//         ValidateAudience = true,
+//         ValidateLifetime = true,
+//         ValidateIssuerSigningKey = true,
+//         ValidIssuer = jwtIssuer,
+//         ValidAudience = jwtIssuer,
+//         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+//     };
+// });
 
 
-#endregion
+
+//builder.Services.AddTransient<IJwtProvider, JwtProvider>();
+
+////register authorization handler
+//builder.Services.AddAuthorization();
+//builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+//builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
+
+
+//#endregion
 
 var app = builder.Build();
 
