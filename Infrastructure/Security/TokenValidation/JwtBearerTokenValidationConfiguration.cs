@@ -25,7 +25,7 @@ public sealed class JwtBearerTokenValidationConfiguration(IOptions<JwtSettings> 
             ValidIssuer = _jwtSettings.Issuer,
             ValidAudience = _jwtSettings.Audience,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
+                Encoding.UTF8.GetBytes(_jwtSettings.SecretKey)),
         };
     }
 }

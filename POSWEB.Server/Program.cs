@@ -41,9 +41,9 @@ builder.Services.AddPresentation()
 //#endregion
 
 
-#region register business services
-builder.Services.AddScoped<IUserService, UserService>();
-#endregion
+//#region register business services
+//builder.Services.AddScoped<IUserService, UserService>();
+//#endregion
 
 
 builder.Services.AddControllers();
@@ -124,6 +124,6 @@ app.UseCors(builder => builder
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
-app.MapGraphQL();
+//app.MapGraphQL();
 
 app.Run();

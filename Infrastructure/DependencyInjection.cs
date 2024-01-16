@@ -78,13 +78,13 @@ public static class DependencyInjection
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         #region register db context provider
-
+        services.AddScoped<DbContext>();
         services.AddDbContext<ApplicationDbContext>(options =>
           options.UseSqlServer(configuration.GetConnectionString("ApplicationDbContext")));
         #endregion
 
         #region register repositories
-        services.AddScoped<IRepository<User>, Repository<User>>();
+        //services.AddScoped<IRepository<User>, Repository<User>>();
         #endregion
 
         return services;
