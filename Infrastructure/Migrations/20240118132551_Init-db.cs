@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace POSWEB.Server.Migrations
+namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initdatabase : Migration
+    public partial class Initdb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,6 +28,8 @@ namespace POSWEB.Server.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -208,6 +210,13 @@ namespace POSWEB.Server.Migrations
                 schema: "lookup",
                 table: "ProductUnits",
                 column: "LastUpdatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                schema: "user",
+                table: "Users",
+                column: "Email",
+                unique: true);
         }
 
         /// <inheritdoc />

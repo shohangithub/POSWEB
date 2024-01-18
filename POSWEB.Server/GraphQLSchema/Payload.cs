@@ -1,4 +1,5 @@
-﻿using POSWEB.Server.Entitites;
+﻿
+using Domain.Entitites;
 
 namespace POSWEB.Server.GraphQLSchema
 {

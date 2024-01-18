@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using POSWEB.Server.Context;
-using POSWEB.Server.Entitites;
+﻿using Domain.Entitites;
+using Infrastructure.Persistence.Context;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace POSWEB.Server.GraphQLSchema
 {

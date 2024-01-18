@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Contractors;
+using Application.ReponseDTO;
+using Application.RequestDTO;
+using Domain.Entitites;
+using Infrastructure.Persistence.Context;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using POSWEB.Server.Authentication;
-using POSWEB.Server.Context;
-using POSWEB.Server.Entitites;
-
+using System.Dynamic;
+using System.Threading;
 namespace POSWEB.Server.Controllers
 {
     [Route("api/[controller]")]
@@ -11,26 +16,27 @@ namespace POSWEB.Server.Controllers
     [ApiKey]
     public class UsersController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUserService<int> _userService;
 
-        public UsersController(ApplicationDbContext context)
+        public UsersController(IUserService<int> userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<IEnumerable<UserListResponse>> GetUsers(CancellationToken cancellationToken)
         {
-            return await _context.Users.ToListAsync();
+            var x = await _userService.ListAsync();
+            return x;
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<UserResponse>> GetUser(int id, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.FindAsync(id);
 
+            var user = await _userService.GetByIdAsync(id, cancellationToken);
             if (user == null)
             {
                 return NotFound();
@@ -42,64 +48,49 @@ namespace POSWEB.Server.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutUser(int id, UserRequest user)
         {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _userService.UpdateAsync(id, user);
 
             return NoContent();
         }
 
+        [HttpPatch("{id}")]
+        public IActionResult PatchUser(int id, [FromBody] JsonPatchDocument<UserRequest> patchDoc)
+        {
+            if (patchDoc != null)
+            {
+                dynamic obj = new ExpandoObject();
+                patchDoc.ApplyTo(obj);
+
+
+                return BadRequest(ModelState);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<UserResponse>> PostUser(UserRequest user, CancellationToken cancellationToken)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            return await _userService.AddAsync(user, cancellationToken); ;
         }
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(int id, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
             return NoContent();
         }
 
-        private bool UserExists(int id)
+        private async ValueTask<bool> UserExists(int id, CancellationToken cancellationToken)
         {
-            return _context.Users.Any(e => e.Id == id);
+            var response = await _userService.IsExistsAsync(id, cancellationToken);
+            return response;
         }
     }
 }

@@ -1,12 +1,16 @@
-﻿namespace Infrastructure.Persistence.Repositories;
+﻿using Microsoft.AspNetCore.JsonPatch;
 
-public interface IRepository<T> where T : class
+namespace Infrastructure.Persistence.Repositories;
+
+public interface IRepository<TEntity,KeyType> 
+    where TEntity : class
 {
-    IQueryable<T> Query();
-    ValueTask<T?> GetByIdAsync(int id, CancellationToken cancellationToken);
-    IEnumerable<T> GetAll();
-    ValueTask AddAsync(T entity, CancellationToken cancellationToken);
-    ValueTask UpdateAsync(T entity, CancellationToken cancellationToken);
-    ValueTask DeleteAsync(T entity);
-    void Delete(params T[] entities);
+    IQueryable<TEntity> Query();
+    ValueTask<TEntity?> GetByIdAsync(KeyType id, CancellationToken cancellationToken);
+    IEnumerable<TEntity> GetAll();
+    ValueTask<bool> AddAsync(TEntity entity, CancellationToken cancellationToken);
+    ValueTask UpdateAsync(TEntity entity, CancellationToken cancellationToken);
+    ValueTask<TEntity?> PatchUpdate(int id, JsonPatchDocument<TEntity> patchDocument, CancellationToken cancellationToken = default);
+    ValueTask DeleteAsync(TEntity entity);
+    void Delete(params TEntity[] entities);
 }

@@ -6,11 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using POSWEB.Server.Authentication;
 using POSWEB.Server.Authentication.OptionSetup;
-using POSWEB.Server.Context;
-using POSWEB.Server.Entitites;
 using POSWEB.Server.GraphQLSchema;
-using POSWEB.Server.ServiceContracts;
-using POSWEB.Server.Services;
 using POSWEB.Server;
 using Infrastructure;
 

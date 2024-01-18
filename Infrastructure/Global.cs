@@ -7,3 +7,4 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using System.Reflection;
 global using Application.Contractors.Common;
+global using Mapster;
