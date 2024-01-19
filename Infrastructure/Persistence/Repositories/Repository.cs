@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Persistence.Context;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -36,25 +37,19 @@ public class Repository<TEntity, KeyType> : IRepository<TEntity, KeyType> where 
         return result > 0;
     }
 
-    public async ValueTask UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public async ValueTask<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         _context.Entry(entity).State = EntityState.Modified;
         await _context.SaveChangesAsync();
+        return entity;
     }
 
-    public async ValueTask UpdateRAsync(Dictionary<string, object?> props, CancellationToken cancellationToken = default)
+    public async ValueTask UpdateExecuteAsync(Expression<Func<SetPropertyCalls<User>, SetPropertyCalls<User>>> props, CancellationToken cancellationToken = default)
     {
-        if (props.Count == 0) return;
-        setPropertyCalls = new SetPropertyCalls<string>()
 
-        _dbSet.ExecuteUpdateAsync(builder => builder.SetProperty(x => name, "stt"))
-
-
-        _context.Entry(entity).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
     }
 
-    public async ValueTask<TEntity?> PatchUpdate(int id, JsonPatchDocument<TEntity> patchDocument, CancellationToken cancellationToken = default)
+    public async ValueTask<TEntity?> UpdatePatchAsync(int id, JsonPatchDocument<TEntity> patchDocument, CancellationToken cancellationToken = default)
     {
         var entity = await _context.Set<TEntity>().FindAsync(id, cancellationToken);
 
@@ -114,7 +109,7 @@ public class Repository<TEntity, KeyType> : IRepository<TEntity, KeyType> where 
 
 
 
-    Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> CombineSetters( IEnumerable<Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>>> setters)
+    Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> CombineSetters(IEnumerable<Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>>> setters)
     {
         Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> expr = sett => sett;
 
