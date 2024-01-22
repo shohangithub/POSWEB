@@ -1,6 +1,8 @@
 ﻿using Application.Contractors;
+using Application.Framework;
 using Application.ReponseDTO;
 using Application.RequestDTO;
+using Azure;
 using Domain.Entitites;
 using Infrastructure.Persistence.Context;
 using Microsoft.AspNetCore.JsonPatch;
@@ -27,8 +29,15 @@ namespace POSWEB.Server.Controllers
         [HttpGet]
         public async Task<IEnumerable<UserListResponse>> GetUsers(CancellationToken cancellationToken)
         {
-            var x = await _userService.ListAsync();
-            return x;
+            return await _userService.ListAsync(cancellationToken);
+        }
+
+        [HttpGet]
+        [Route("GetPageUsers")]
+        public async Task<PaginationResult<UserListResponse>> GetPageUsers([FromQuery]PaginationQuery requestQuery, CancellationToken cancellationToken)
+        {
+            Console.WriteLine(requestQuery);
+            return await _userService.PaginationListAsync(requestQuery, cancellationToken);
         }
 
         // GET: api/Users/5

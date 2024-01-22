@@ -1,30 +1,23 @@
-﻿using Infrastructure.Persistence.Context;
+﻿using Application.Framework;
+using Azure;
+using Infrastructure.Persistence.Context;
 using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using System;
+using System.Data;
 using System.Dynamic;
 using System.Threading;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class Repository<TEntity, KeyType> : IRepository<TEntity, KeyType> where TEntity : class
+public class Repository<TEntity, KeyType>(ApplicationDbContext _context) : IRepository<TEntity, KeyType> where TEntity : class
 {
-    private readonly ApplicationDbContext _context;
-    private readonly DbSet<TEntity> _dbSet;
+    private readonly DbSet<TEntity> _dbSet = _context.Set<TEntity>() ?? throw new ArgumentNullException("dbset can't be null !");
 
-    public Repository(ApplicationDbContext context)
-    {
-        _context = context;
-        _dbSet = context.Set<TEntity>();
-    }
-
-    //public DbSet<TEntity> Get_dbSet()
-    //{
-    //    return _dbSet;
-    //}
 
     public IQueryable<TEntity> Query() => _dbSet.AsNoTracking().AsQueryable();
 
@@ -123,5 +116,26 @@ public class Repository<TEntity, KeyType> : IRepository<TEntity, KeyType> where 
         }
 
         return expr;
+    }
+
+    public async ValueTask<PaginationResult<TResponse>> PaginationQuery<TResponse>(PaginationQuery paginationQuery, Expression<Func<TEntity, bool>>? predicate, Expression<Func<TEntity, TResponse>> selector, CancellationToken cancellationToken=default)
+    {
+        Expression<Func<TEntity, bool>> expression = obj => true;
+
+        if (predicate is not null)
+        {
+            expression = expression.AppendExpression(predicate, ESearchOperator.AND);
+        }
+
+        var query = _dbSet.AsNoTracking().Where(expression);
+
+        if (paginationQuery.OrderBy is not null)
+        {
+            query = query.OrderBy<TEntity>(paginationQuery.OrderBy, paginationQuery.IsAscending ?? true);
+        }
+
+        var responseQuery = query.Select(selector);
+
+        return await PaginationResult<TResponse>.CreateAsync(query: responseQuery, currentPage: paginationQuery.CurrentPage, pageSize: paginationQuery.PageSize, cancellationToken);
     }
 }
