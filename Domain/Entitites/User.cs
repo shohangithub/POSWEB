@@ -5,7 +5,6 @@
 public class User : BaseEntity<int>
 {
     public required string UserName { get; set; }
-    [EmailAddress(ErrorMessage="Invalid email address")]
     public required string Email { get; set; }
     public ERoles Role { get; set; }
     public required bool IsActive { get; set; }

@@ -8,8 +8,8 @@ public class ApiKeyAttribute : Attribute, IAuthorizationFilter
 {
     public void OnAuthorization(AuthorizationFilterContext context)
     {
-        if(!IsApiKeyValid(context.HttpContext)) 
-            context.Result = new UnauthorizedResult();
+        //if(!IsApiKeyValid(context.HttpContext)) 
+        //    context.Result = new UnauthorizedResult();
     }
 
     private static bool IsApiKeyValid(HttpContext context)

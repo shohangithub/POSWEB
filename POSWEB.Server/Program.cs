@@ -9,22 +9,16 @@ using POSWEB.Server.Authentication.OptionSetup;
 using POSWEB.Server.GraphQLSchema;
 using POSWEB.Server;
 using Infrastructure;
+using POSWEB.Server.Middlewares;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddPresentation()
-    //.AddApplication()
+        //.AddApplication()
         .AddInfrastructure(builder.Configuration);
 
-//// Add services to the container.
-//#region register db context provider
 
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//  options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationDbContext")));
-//builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-//#endregion
 
 //#region register graphql services
 
@@ -35,17 +29,6 @@ builder.Services.AddPresentation()
 //                .AddMutationType<Mutations>();
 
 //#endregion
-
-
-//#region register business services
-//builder.Services.AddScoped<IUserService, UserService>();
-//#endregion
-
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 
 //#region JWT configuration
@@ -73,27 +56,23 @@ builder.Services.AddSwaggerGen();
 
 //builder.Services.AddTransient<IJwtProvider, JwtProvider>();
 
-////register authorization handler
-//builder.Services.AddAuthorization();
-//builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
-//builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
-
 
 //#endregion
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
-else
-{
-    app.UseDeveloperExceptionPage();
-    app.UseMigrationsEndPoint();
-}
+
+//else
+//{
+//    app.UseDeveloperExceptionPage();
+//    app.UseMigrationsEndPoint();
+//}
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
