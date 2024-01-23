@@ -1,5 +1,5 @@
-﻿using Infrastructure.Persistence.Context;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Persistence.Context;
 using static POSWEB.Server.GraphQLSchema.InputPayload;
 
 namespace POSWEB.Server.GraphQLSchema;

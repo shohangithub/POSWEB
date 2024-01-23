@@ -1,4 +1,8 @@
-﻿namespace Infrastructure.Persistence.Context;
+﻿using Domain.Entitites;
+using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+
+namespace Persistence.Context;
 
 public class ApplicationDbContext : DbContext
 {

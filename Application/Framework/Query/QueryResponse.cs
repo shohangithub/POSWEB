@@ -18,7 +18,7 @@ public struct PaginationResult<T>
     {
         var notZeroPageSize = pageSize == 0 ? 1 : pageSize;
         var totalPages = (totalData / notZeroPageSize) + ((totalData % notZeroPageSize) == 0 ? 0 : 1);
-        Items = items;
+        Items = items ?? new();
         Paging = new PagingResponse(HasNextPage: (currentPage * pageSize) < totalData,
                                     HasPreviousPage: pageSize > 1,
                                     PageSize: pageSize,

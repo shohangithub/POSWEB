@@ -5,8 +5,6 @@ using System.Net.Mail;
 using System.Net;
 using Infrastructure.BackgroundServices;
 using Infrastructure.Services;
-using Infrastructure.Persistence.Context;
-using Infrastructure.Persistence.Repositories;
 using Infrastructure.Security;
 using Infrastructure.Security.PolicyEnforcer;
 using Infrastructure.Security.CurrentUserProvider;

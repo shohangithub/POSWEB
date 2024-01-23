@@ -1,1 +1,9 @@
 ﻿global using Domain.Entitites;
+global using Application.Contractors;
+global using Application.Framework;
+global using Application.ReponseDTO;
+global using Application.RequestDTO;
+global using Microsoft.AspNetCore.JsonPatch;
+global using Microsoft.AspNetCore.Mvc;
+global using POSWEB.Server.Authentication;
+global using System.Dynamic;

@@ -1,18 +1,4 @@
-﻿using Application.Framework;
-using Azure;
-using Infrastructure.Persistence.Context;
-using Mapster;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
-using System;
-using System.Data;
-using System.Dynamic;
-using System.Threading;
-
-namespace Infrastructure.Persistence.Repositories;
+﻿namespace Persistence.Repositories;
 
 public class Repository<TEntity, KeyType>(ApplicationDbContext _context) : IRepository<TEntity, KeyType> where TEntity : class
 {

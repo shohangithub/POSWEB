@@ -1,8 +1,4 @@
-﻿using Application.Framework;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.EntityFrameworkCore.Query;
-
-namespace Infrastructure.Persistence.Repositories;
+﻿namespace Persistence.Repositories;
 
 public interface IRepository<TEntity, KeyType>
     where TEntity : class

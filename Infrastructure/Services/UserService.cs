@@ -1,10 +1,4 @@
-﻿
-
-using Application.Framework;
-using FluentValidation;
-using Infrastructure.Persistence.Repositories;
-using Infrastructure.Validators;
-using System.ComponentModel.DataAnnotations;
+﻿using Infrastructure.Validators;
 
 namespace Infrastructure.Services;
 

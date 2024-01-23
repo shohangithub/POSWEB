@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Persistence.Configurations;
+﻿namespace Persistence.Configurations;
 
 public class UserConfigurations : IEntityTypeConfiguration<User>
 {

@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Infrastructure.Migrations
+namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Initdb : Migration
+    public partial class initdbafterpersistancelayer : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
