@@ -12,13 +12,14 @@ namespace Infrastructure.Security.TokenGenerator
         private readonly JwtSettings _jwtSettings = jwtOptions.Value;
 
         public string GenerateToken(
-            Guid id,
+            int id,
             string firstName,
             string lastName,
             string email,
-            SubscriptionType subscriptionType,
-            List<string> permissions,
-            List<string> roles)
+            List<string>? permissions = null,
+            List<string>? roles = null,
+            SubscriptionType? subscriptionType = null
+            )
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -31,8 +32,8 @@ namespace Infrastructure.Security.TokenGenerator
             new("id", id.ToString()),
         };
 
-            roles.ForEach(role => claims.Add(new(ClaimTypes.Role, role)));
-            permissions.ForEach(permission => claims.Add(new("permissions", permission)));
+            roles?.ForEach(role => claims.Add(new(ClaimTypes.Role, role)));
+            permissions?.ForEach(permission => claims.Add(new("permissions", permission)));
 
             var token = new JwtSecurityToken(
                 _jwtSettings.Issuer,

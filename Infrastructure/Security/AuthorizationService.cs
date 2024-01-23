@@ -5,11 +5,16 @@ using Infrastructure.Security.PolicyEnforcer;
 
 namespace Infrastructure.Security
 {
-    public class AuthorizationService(
-    IPolicyEnforcer _policyEnforcer,
-    ICurrentUserProvider _currentUserProvider)
-        : IAuthorizationService
+    public class AuthorizationService : IAuthorizationService
     {
+        private readonly IPolicyEnforcer _policyEnforcer;
+        private readonly ICurrentUserProvider _currentUserProvider;
+        public AuthorizationService(IPolicyEnforcer policyEnforcer, ICurrentUserProvider currentUserProvider)
+        {
+            _policyEnforcer = policyEnforcer;
+            _currentUserProvider = currentUserProvider;
+
+        }
         public ErrorOr<Success> AuthorizeCurrentUser(
             IAuthorizeableRequest request,
             List<string> requiredRoles,

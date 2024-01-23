@@ -91,7 +91,7 @@ public static class DependencyInjection
 
     private static IServiceCollection AddAuthorization(this IServiceCollection services)
     {
-        //services.AddScoped<IAuthorizationService, AuthorizationService>();
+        services.AddScoped<Application.Contractors.Common.IAuthorizationService, AuthorizationService>();
         services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
         services.AddSingleton<IPolicyEnforcer, PolicyEnforcer>();
 

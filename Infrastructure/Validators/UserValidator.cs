@@ -11,7 +11,7 @@ namespace Infrastructure.Validators
     {
         public UserValidator()
         {
-            RuleFor(cmd => cmd.UserName).NotNull().MinimumLength(100).Equal("Shohan");
+            RuleFor(cmd => cmd.UserName).NotNull().MinimumLength(3);
         }
     }
 }

@@ -10,6 +10,7 @@ using POSWEB.Server.GraphQLSchema;
 using POSWEB.Server;
 using Infrastructure;
 using POSWEB.Server.Middlewares;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);

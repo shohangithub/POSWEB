@@ -1,8 +1,11 @@
-﻿namespace POSWEB.Server.Controllers;
+﻿using Application.Common;
+
+namespace POSWEB.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[ApiKey]
+//[ApiKey]
+[Authorize(Permissions = "", Policies = "", Roles = "")]
 public class UsersController : ControllerBase
 {
     private readonly IUserService<int> _userService;

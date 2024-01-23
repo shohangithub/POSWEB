@@ -5,9 +5,11 @@ namespace Infrastructure.Services;
 public class UserService : IUserService<int>
 {
     private readonly IRepository<User, int> _repository;
-    public UserService(IRepository<User, int> repository)
+    private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    public UserService(IRepository<User, int> repository, IJwtTokenGenerator jwtTokenGenerator)
     {
         _repository = repository;
+        _jwtTokenGenerator = jwtTokenGenerator;
     }
 
     public async ValueTask<UserResponse> AddAsync(UserRequest user, CancellationToken cancellationToken = default)
@@ -42,9 +44,21 @@ public class UserService : IUserService<int>
         throw new NotImplementedException();
     }
 
-    public ValueTask<string> GetUserToken(string email, CancellationToken cancellationToken = default)
+    public async ValueTask<string> GetUserToken(string email, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var user = await GetByEmailAsync(email, cancellationToken);
+        if (user is null) throw new Exception("User not found !");
+
+        var token = _jwtTokenGenerator.GenerateToken(
+            id: user.Id,
+            email: user.Email,
+            firstName: user.UserName,
+            lastName: user.UserName,
+            roles: null,
+            permissions: null,
+            subscriptionType: null
+            );
+        return token;
     }
 
     public async ValueTask<bool> IsExistsAsync(int id, CancellationToken cancellationToken = default)
