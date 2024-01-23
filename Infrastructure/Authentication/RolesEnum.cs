@@ -1,4 +1,4 @@
-﻿namespace POSWEB.Server.Authentication
+﻿namespace Infrastructure.Authentication
 {
     public enum Roles
     {

@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-namespace POSWEB.Server.Authentication;
+﻿using Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
+namespace Infrastructure.Authentication;
 
 public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionRequirement>
 {
@@ -7,30 +8,30 @@ public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionReq
     {
         var role = context.User.Claims.FirstOrDefault(x => x.Type == CustomClaims.Role)?.Value;
 
-
-        //if (requirement.Permission == role )
-        //{
-        //    context.Succeed(requirement);
-        //}
         if (role == requirement.Permission)
         {
             context.Succeed(requirement);
         }
         else if (role == nameof(Roles.Admin) && (
-               requirement.Permission == nameof(Roles.Admin)
-            || requirement.Permission == nameof(Roles.Standard))
+               requirement.Permission == nameof(ERoles.Admin)
+            || requirement.Permission == nameof(ERoles.Standard))
             )
         {
             context.Succeed(requirement);
         }
-        else if (role == nameof(Roles.MasterAdmin) && (
-               requirement.Permission == nameof(Roles.MasterAdmin)
-            || requirement.Permission == nameof(Roles.Admin)
-            || requirement.Permission == nameof(Roles.Standard))
+        else if (role == nameof(ERoles.MasterAdmin) && (
+               requirement.Permission == nameof(ERoles.MasterAdmin)
+            || requirement.Permission == nameof(ERoles.Admin)
+            || requirement.Permission == nameof(ERoles.Standard))
             )
         {
             context.Succeed(requirement);
         }
+        else
+        {
+            context.Fail();
+        }
+
 
         return Task.CompletedTask;
     }

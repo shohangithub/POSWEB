@@ -1,15 +1,20 @@
-﻿using Infrastructure.Validators;
+﻿using Domain.Enums;
+using Infrastructure.Authentication;
+using Infrastructure.Authentication.TokenGenerator;
+using Infrastructure.Validators;
 
 namespace Infrastructure.Services;
 
 public class UserService : IUserService<int>
 {
     private readonly IRepository<User, int> _repository;
-    private readonly IJwtTokenGenerator _jwtTokenGenerator;
-    public UserService(IRepository<User, int> repository, IJwtTokenGenerator jwtTokenGenerator)
+    // private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly IJwtProvider _jwtProvider;
+    public UserService(IRepository<User, int> repository, IJwtProvider jwtProvider)
     {
         _repository = repository;
-        _jwtTokenGenerator = jwtTokenGenerator;
+        _jwtProvider = jwtProvider;
+        //_jwtTokenGenerator = jwtTokenGenerator;
     }
 
     public async ValueTask<UserResponse> AddAsync(UserRequest user, CancellationToken cancellationToken = default)
@@ -44,21 +49,20 @@ public class UserService : IUserService<int>
         throw new NotImplementedException();
     }
 
-    public async ValueTask<string> GetUserToken(string email, CancellationToken cancellationToken = default)
+    public async ValueTask<TokenResponse> GetUserToken(string email, CancellationToken cancellationToken = default)
     {
         var user = await GetByEmailAsync(email, cancellationToken);
         if (user is null) throw new Exception("User not found !");
 
-        var token = _jwtTokenGenerator.GenerateToken(
+        var token = _jwtProvider.Generate(new TokenUser(
             id: user.Id,
             email: user.Email,
             firstName: user.UserName,
             lastName: user.UserName,
-            roles: null,
-            permissions: null,
-            subscriptionType: null
-            );
-        return token;
+            roles: [ERoles.Admin, ERoles.Admin, ERoles.Standard],
+            permissions: null
+            ));
+        return new TokenResponse(token, user.Email, user.UserName, user.UserName);
     }
 
     public async ValueTask<bool> IsExistsAsync(int id, CancellationToken cancellationToken = default)

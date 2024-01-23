@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace POSWEB.Server.Authentication;
+namespace Infrastructure.Authentication;
 
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
 public class ApiKeyAttribute : Attribute, IAuthorizationFilter
 {
     public void OnAuthorization(AuthorizationFilterContext context)
     {
-        //if(!IsApiKeyValid(context.HttpContext)) 
-        //    context.Result = new UnauthorizedResult();
+        if(!IsApiKeyValid(context.HttpContext)) 
+           context.Result = new UnauthorizedResult();
     }
 
     private static bool IsApiKeyValid(HttpContext context)

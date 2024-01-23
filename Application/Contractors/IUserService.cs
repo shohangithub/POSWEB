@@ -10,7 +10,7 @@ public interface IUserService<T>
     ValueTask<PaginationResult<UserListResponse>> PaginationListAsync(PaginationQuery requestQuery, CancellationToken cancellationToken = default);
     ValueTask<UserResponse> GetByIdAsync(T id, CancellationToken cancellationToken = default);
     ValueTask<UserResponse> GetByEmailAsync(string email, CancellationToken cancellationToken = default);
-    ValueTask<string> GetUserToken(string email, CancellationToken cancellationToken = default);
+    ValueTask<TokenResponse> GetUserToken(string email, CancellationToken cancellationToken = default);
     ValueTask<UserResponse> AddAsync(UserRequest user, CancellationToken cancellationToken = default);
     ValueTask<UserResponse> UpdateAsync(T id, UserRequest user, CancellationToken cancellationToken = default);
     ValueTask<bool> IsExistsAsync(T id, CancellationToken cancellationToken = default);

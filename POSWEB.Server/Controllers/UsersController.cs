@@ -1,11 +1,12 @@
 ﻿using Application.Common;
+using Domain.Enums;
 
 namespace POSWEB.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 //[ApiKey]
-[Authorize(Permissions = "", Policies = "", Roles = "")]
+
 public class UsersController : ControllerBase
 {
     private readonly IUserService<int> _userService;
@@ -24,6 +25,7 @@ public class UsersController : ControllerBase
 
     [HttpGet]
     [Route("GetPageUsers")]
+    [Infrastructure.Authentication.Permission(ERoles.Admin)]
     public async Task<PaginationResult<UserListResponse>> GetPageUsers([FromQuery]PaginationQuery requestQuery, CancellationToken cancellationToken)
     {
         Console.WriteLine(requestQuery);

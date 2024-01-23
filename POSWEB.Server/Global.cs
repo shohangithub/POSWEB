@@ -5,5 +5,7 @@ global using Application.ReponseDTO;
 global using Application.RequestDTO;
 global using Microsoft.AspNetCore.JsonPatch;
 global using Microsoft.AspNetCore.Mvc;
-global using POSWEB.Server.Authentication;
+global using Infrastructure.Authentication;
 global using System.Dynamic;
+global using System.Net;
+global using System.Text.Json;

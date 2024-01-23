@@ -1,4 +1,5 @@
 ﻿using Application.Contractors;
+using Infrastructure.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +15,11 @@ namespace POSWEB.Server.Controllers
         {
             _userService = userService;
         }
-
+        [ApiKey]
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] LoginRequest loginRequest, CancellationToken cancellationToken)
+        public async Task<TokenResponse> Post([FromBody] LoginRequest loginRequest, CancellationToken cancellationToken)
         {
-            var token = await _userService.GetUserToken(loginRequest.Email, cancellationToken);
-            return Ok(token);
+            return await _userService.GetUserToken(loginRequest.Email, cancellationToken);
         }
     }
 }
