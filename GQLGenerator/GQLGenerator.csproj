@@ -1,9 +1,50 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+		
+		<!--<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>Md. Rafiul Islam</Authors>
+		<Description>generate graphql schemas</Description>
+		<Version>24.01.27.03</Version>
+		<Copyright>2024</Copyright>
+		<PackageId>RIS.Generator.GqlSchema</PackageId>-->
+	</PropertyGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0-3.final" />
+		<!--<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />-->
+		
+		
+		<!--Severity	Code	Description	Project	File	Line	Suppression State
+		Error	NU1107	Version conflict detected for Microsoft.CodeAnalysis.Common. Install/reference Microsoft.CodeAnalysis.Common 4.8.0 directly to project POSWEB.Server to resolve this issue.
+		POSWEB.Server -> GQLGenerator -> Microsoft.CodeAnalysis.CSharp 4.8.0 -> Microsoft.CodeAnalysis.Common (= 4.8.0)
+		POSWEB.Server -> Microsoft.VisualStudio.Web.CodeGeneration.Design 8.0.0 -> Microsoft.DotNet.Scaffolding.Shared 8.0.0 -> Microsoft.CodeAnalysis.CSharp.Features 4.8.0-3.final -> Microsoft.CodeAnalysis.Common (= 4.8.0-3.final).	POSWEB.Server	C:\Users\Acer\source\repos\POSWEB\POSWEB.Server\POSWEB.Server.csproj	1-->
+
+	</ItemGroup>
+
+	<!--<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+	</ItemGroup>-->
+
+	<ItemGroup>
+	  <Folder Include="Templates\" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Remove="Templates\**\*.scriban" />
+		<EmbeddedResource Include="Templates\**\*.scriban" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\GQLAttribute\GQLAttribute.csproj" />
+	</ItemGroup>
 </Project>

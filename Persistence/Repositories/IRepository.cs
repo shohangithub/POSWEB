@@ -1,4 +1,6 @@
-﻿namespace Persistence.Repositories;
+﻿using System.Threading;
+
+namespace Persistence.Repositories;
 
 public interface IRepository<TEntity, KeyType>
     where TEntity : class
@@ -11,6 +13,6 @@ public interface IRepository<TEntity, KeyType>
     ValueTask<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken);
     ValueTask UpdateExecuteAsync(Expression<Func<SetPropertyCalls<User>, SetPropertyCalls<User>>> props, CancellationToken cancellationToken = default);
     ValueTask<TEntity?> UpdatePatchAsync(int id, JsonPatchDocument<TEntity> patchDocument, CancellationToken cancellationToken = default);
-    ValueTask DeleteAsync(TEntity entity);
+    ValueTask<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken);
     void Delete(params TEntity[] entities);
 }

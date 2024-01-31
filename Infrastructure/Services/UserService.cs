@@ -28,6 +28,13 @@ public class UserService : IUserService<int>
         return response;
     }
 
+    public async ValueTask<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
+    {
+       var existingData = await _repository.GetByIdAsync(id, cancellationToken);
+        if (existingData is null) throw new ArgumentNullException(nameof(existingData));
+       return await _repository.DeleteAsync(existingData, cancellationToken);
+    }
+
     public async ValueTask<UserResponse> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
     {
         var response = await _repository.Query()

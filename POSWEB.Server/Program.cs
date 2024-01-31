@@ -1,6 +1,7 @@
 using POSWEB.Server;
 using Infrastructure;
 using POSWEB.Server.Middlewares;
+using POSWEB.Server.GraphQLSchema;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,15 +12,15 @@ builder.Services.AddPresentation()
 
 
 
-//#region register graphql services
+#region register graphql services
 
 
 
-//builder.Services.AddGraphQLServer()
-//                .AddQueryType<Query>()
-//                .AddMutationType<Mutations>();
+builder.Services.AddGraphQLServer()
+                .AddQueryType<Query>()
+                .AddMutationType<Mutations>();
 
-//#endregion
+#endregion
 
 
 
@@ -68,6 +69,6 @@ app.UseCors(builder => builder
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
-//app.MapGraphQL();
+app.MapGraphQL();
 
 app.Run();

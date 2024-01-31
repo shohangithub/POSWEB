@@ -1,5 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Entitites;
+using Domain.Enums;
+using Mapster;
+using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
+using Persistence.Repositories;
 using static POSWEB.Server.GraphQLSchema.InputPayload;
 
 namespace POSWEB.Server.GraphQLSchema;
@@ -33,7 +37,7 @@ public class Mutations
 
 
     [GraphQLDescription($"Update a ProductCategory.")]
-    public async ValueTask<UpdateResponsePayload<UpdateProductCategoryResponse>> UpdateProductCategoryAsync(
+    public async ValueTask<UpdateMutationPayload<UpdateProductCategoryResponse>> UpdateProductCategoryAsync(
                 short id,
                 AddProductCategoryInput input,
                 [Service] ApplicationDbContext context,
@@ -51,8 +55,8 @@ public class Mutations
                                   .SetProperty(x => x.LastUpdatedTime, DateTime.Now)
                                   , cancellationToken);
             var response = new UpdateProductCategoryResponse(input.CategoryName, input.Description, input.IsActive);
-            if (result <= 0) return new UpdateResponsePayload<UpdateProductCategoryResponse>(response, false);
-            return new UpdateResponsePayload<UpdateProductCategoryResponse>(response);
+            if (result <= 0) return new UpdateMutationPayload<UpdateProductCategoryResponse>(response, false);
+            return new UpdateMutationPayload<UpdateProductCategoryResponse>(response);
         }
         catch (Exception ex)
         {
@@ -75,7 +79,7 @@ public class Mutations
 
 
     [GraphQLDescription($"Delete a ProductCategory.")]
-    public async ValueTask<DeleteMutationPayload> DeleteProductCategoryAsync(
+    public async ValueTask<DeleteMutationPayload<short>> DeleteProductCategoryAsync(
                short id,
                [Service] ApplicationDbContext context,
                CancellationToken cancellationToken
@@ -84,28 +88,61 @@ public class Mutations
         try
         {
             var result = await context.ProductCategories.Where(x => x.Id == id).ExecuteDeleteAsync(cancellationToken);
-            DeleteMutationPayload response = new()
-            {
-                model = new DeleteMutation
-                {
-                    IsSucess = result > 0,
-                    Message = result > 0 ? "ProductCategory deleted successfully" : "ProductCategory delete operation failed"
-                }
-            };
+            DeleteMutationPayload<short> response = new(id, result > 0, result > 0 ? "ProductCategory deleted successfully" : "ProductCategory delete operation failed");
+
             return response;
         }
         catch (Exception ex)
         {
-            DeleteMutationPayload response = new()
-            {
-                model = new DeleteMutation
-                {
-                    IsSucess = false,
-                    Message = ex.Message
-                }
-            };
+            DeleteMutationPayload<short> response = new(id, false, "Operation failed ! internal server error.");
+
             return response;
         }
 
+    }
+
+
+    [GraphQLDescription($"Add User Information")]
+    public async ValueTask<UserResponse> AddUserAsync(UserRequest input, [Service] IRepository<User, int> _repository, CancellationToken cancellationToken)
+    {
+        var entity = input.Adapt<User>();
+        var result = await _repository.AddAsync(entity, cancellationToken);
+
+        return result ? entity.Adapt<UserResponse>() : input.Adapt<UserResponse>();
+    }
+
+    [GraphQLDescription($"Update User Information")]
+    public async ValueTask<UserResponse> UpdateUserAsync(
+                int id,
+                UserRequest input,
+                [Service] IRepository<User, int> _repository,
+                CancellationToken cancellationToken
+                )
+    {
+
+        var entity = input.Adapt<User>();
+        var result = await _repository.UpdateAsync(entity, cancellationToken);
+        if (result is null) return null;
+
+
+        var response = entity.Adapt<UserResponse>();
+        return response;
+    }
+
+
+    [GraphQLDescription($"Delete User Information.")]
+    public async ValueTask<DeleteMutationPayload<int>> DeleteUserAsync(
+               int id,
+               [Service] IRepository<User, int> _repository,
+               CancellationToken cancellationToken
+               )
+    {
+        var existingData = await _repository.GetByIdAsync(id, cancellationToken);
+        if (existingData is null) throw new ArgumentNullException(nameof(existingData));
+        var result = await _repository.DeleteAsync(existingData, cancellationToken);
+
+        DeleteMutationPayload<int> response = new(id, result, result ? "ProductCategory deleted successfully" : "ProductCategory delete operation failed");
+
+        return response;
     }
 }

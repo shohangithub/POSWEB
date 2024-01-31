@@ -19,6 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\GQLGenerator\GQLGenerator.csproj"  OutputItemType="Analyzer"/>
 	  <ProjectReference Include="..\Persistence\Persistence.csproj" />
 	</ItemGroup>
 

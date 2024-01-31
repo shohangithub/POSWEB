@@ -7,7 +7,7 @@ public class Repository<TEntity, KeyType>(ApplicationDbContext _context) : IRepo
 
     public IQueryable<TEntity> Query() => _dbSet.AsNoTracking().AsQueryable();
 
-    public async ValueTask<TEntity?> GetByIdAsync(int id, CancellationToken cancellationToken = default) => await _context.Set<TEntity>().FindAsync(id, cancellationToken);
+    public async ValueTask<TEntity?> GetByIdAsync(KeyType id, CancellationToken cancellationToken = default) => await _context.Set<TEntity>().FindAsync(id, cancellationToken);
 
     public async ValueTask<bool> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
@@ -54,10 +54,11 @@ public class Repository<TEntity, KeyType>(ApplicationDbContext _context) : IRepo
         //}
     }
 
-    public async ValueTask DeleteAsync(TEntity entity)
+    public async ValueTask<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         _dbSet.Remove(entity);
-        await _context.SaveChangesAsync();
+        var result = await _context.SaveChangesAsync(cancellationToken);
+        return result > 0;
     }
     public void Delete(params TEntity[] entities)
     {
@@ -76,11 +77,6 @@ public class Repository<TEntity, KeyType>(ApplicationDbContext _context) : IRepo
     }
 
     public void Update(TEntity entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public ValueTask<TEntity?> GetByIdAsync(KeyType id, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
@@ -104,7 +100,7 @@ public class Repository<TEntity, KeyType>(ApplicationDbContext _context) : IRepo
         return expr;
     }
 
-    public async ValueTask<PaginationResult<TResponse>> PaginationQuery<TResponse>(PaginationQuery paginationQuery, Expression<Func<TEntity, bool>>? predicate, Expression<Func<TEntity, TResponse>> selector, CancellationToken cancellationToken=default)
+    public async ValueTask<PaginationResult<TResponse>> PaginationQuery<TResponse>(PaginationQuery paginationQuery, Expression<Func<TEntity, bool>>? predicate, Expression<Func<TEntity, TResponse>> selector, CancellationToken cancellationToken = default)
     {
         Expression<Func<TEntity, bool>> expression = obj => true;
 

@@ -13,6 +13,7 @@ public interface IUserService<T>
     ValueTask<TokenResponse> GetUserToken(string email, CancellationToken cancellationToken = default);
     ValueTask<UserResponse> AddAsync(UserRequest user, CancellationToken cancellationToken = default);
     ValueTask<UserResponse> UpdateAsync(T id, UserRequest user, CancellationToken cancellationToken = default);
+    ValueTask<bool> DeleteAsync(T id, CancellationToken cancellationToken = default);
     ValueTask<bool> IsExistsAsync(T id, CancellationToken cancellationToken = default);
     ValueTask<IEnumerable<Lookup<int>>> GetLookup(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken = default);
 }

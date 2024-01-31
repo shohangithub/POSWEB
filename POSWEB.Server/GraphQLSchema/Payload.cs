@@ -3,12 +3,15 @@ using Domain.Entitites;
 
 namespace POSWEB.Server.GraphQLSchema
 {
-    public record UpdateResponsePayload<T>(T? UpdatedData, bool IsSuccess = true) where T : struct;
+    public record UpdateMutationPayload<T>(T? Data, bool IsSuccess = true, string Message = "") where T : struct;
+    public record AddMutationPayload<T>(T? Data, bool IsSuccess = true, string Message = "") where T : struct;
+    public record DeleteMutationPayload<T>(T Id, bool IsSucess = true, string Message = "");
+
+
     public record ProductCategoryPayload(ProductCategory? model);
     public record UserPayload(User? model);
     public record ProductPayload(Product? model);
 
 
-    public record struct DeleteMutation(bool IsSucess, string Message);
-    public record struct DeleteMutationPayload(DeleteMutation model);
+
 }
