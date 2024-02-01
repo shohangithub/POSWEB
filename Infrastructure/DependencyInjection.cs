@@ -29,8 +29,7 @@ public static class DependencyInjection
             .AddServices()
             .AddBackgroundServices(configuration)
             .AddAuthorizationServices()
-            .AddAuthentication(configuration)
-            .AddPersistence(configuration);
+            .AddAuthentication(configuration);
 
         return services;
     }
@@ -75,21 +74,6 @@ public static class DependencyInjection
     {
         services.AddSingleton<IDateTimeProvider, SystemDateTimeProvider>();
         services.AddScoped<IUserService<int>, UserService>();
-
-        return services;
-    }
-
-    private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
-    {
-        #region register db context provider
-        //services.AddScoped<DbContext>();
-        services.AddDbContext<ApplicationDbContext>(options =>
-          options.UseSqlServer(configuration.GetConnectionString("ApplicationDbContext")));
-        #endregion
-
-        #region register repositories
-        services.AddScoped<IRepository<User, int>, Repository<User, int>>();
-        #endregion
 
         return services;
     }

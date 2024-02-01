@@ -63,6 +63,7 @@ public class ApplicationDbContextInitializer
                 Email = "ris.shohan@gmail.com",
                 IsActive = true,
                 Role = ERoles.MasterAdmin,
+                TenantId = new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00")
             });
 
             await _context.SaveChangesAsync();

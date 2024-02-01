@@ -2,12 +2,15 @@ using POSWEB.Server;
 using Infrastructure;
 using POSWEB.Server.Middlewares;
 using POSWEB.Server.GraphQLSchema;
+using Persistence;
+using Persistence.SeedData;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddPresentation()
         //.AddApplication()
+        .AddPersistence(builder.Configuration)
         .AddInfrastructure(builder.Configuration);
 
 
@@ -52,6 +55,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    await app.InitialiseDatabaseAsync();
 }
 
 app.UseHttpsRedirection();
