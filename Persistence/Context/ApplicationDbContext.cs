@@ -9,11 +9,13 @@ public class ApplicationDbContext : DbContext
 {
     private readonly TenantProvider _tenantProvider;
     private readonly Guid _tenantId;
+    private readonly string defaultTenantId = "11223344-5566-7788-99AA-BBCCDDEEFF00";
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, TenantProvider tenantProvider)
         : base(options)
     {
         _tenantProvider = tenantProvider;
-        _tenantId = _tenantProvider.GetTenantId();
+        var tenantId = _tenantProvider.GetTenantId();
+        _tenantId = tenantId == Guid.Empty ? new Guid(defaultTenantId) : tenantId;
     }
 
     public DbSet<Product> Products { get; set; }

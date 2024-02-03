@@ -18,11 +18,13 @@ namespace Persistence.Tenant
 
         public Guid GetTenantId()
         {
+            //if (_contextAccessor.HttpContext is null)
+            //    return new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"); //default tenant id
             var tenantHeader = _contextAccessor.HttpContext?.Request.Headers[TenantHeaderName];
             if (!tenantHeader.HasValue || !Guid.TryParse(tenantHeader.Value, out Guid tenantId) || !Tenants.All.Contains(tenantId))
             {
-               // throw new ApplicationException("Tenant header is not found !");
-               return Guid.Empty;
+                // throw new ApplicationException("Tenant header is not found !");
+                return Guid.Empty;
             }
 
             return tenantId;

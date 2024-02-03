@@ -55,6 +55,8 @@ public class ApplicationDbContextInitializer
     {
         // Default data
         // Seed, if necessary
+
+        var defaultTenantId = new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00");
         if (!_context.Users.Any())
         {
             _context.Users.Add(new User
@@ -63,7 +65,7 @@ public class ApplicationDbContextInitializer
                 Email = "ris.shohan@gmail.com",
                 IsActive = true,
                 Role = ERoles.MasterAdmin,
-                TenantId = new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00")
+                TenantId = defaultTenantId
             });
 
             await _context.SaveChangesAsync();
