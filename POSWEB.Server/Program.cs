@@ -16,40 +16,40 @@ builder.Services.AddPresentation()
 
 
 
-#region register graphql services
+//#region register graphql services
 
 
 
-builder.Services.AddGraphQLServer()
-                .AddQueryType<Query>()
-                .AddMutationType<Mutations>()
-                .AddErrorFilter(error =>
-                {
-                    if (error.Exception is NullReferenceException)
-                    {
-                        return error.WithCode("NullRef");
-                    }
+//builder.Services.AddGraphQLServer()
+//                .AddQueryType<Query>()
+//                .AddMutationType<Mutations>()
+//                .AddErrorFilter(error =>
+//                {
+//                    if (error.Exception is NullReferenceException)
+//                    {
+//                        return error.WithCode("NullRef");
+//                    }
 
-                    if (error.Exception is DuplicateWaitObjectException)
-                    {
-                        return error.WithCode("NullRef");
-                    }
+//                    if (error.Exception is DuplicateWaitObjectException)
+//                    {
+//                        return error.WithCode("NullRef");
+//                    }
 
-                    //StatusCodes.Status500InternalServerError
+//                    //StatusCodes.Status500InternalServerError
                    
-                    error.RemoveException();
-                    error.RemoveLocations();
-                    error.RemoveSyntaxNode();
-                    error.RemoveExtensions();
+//                    error.RemoveException();
+//                    error.RemoveLocations();
+//                    error.RemoveSyntaxNode();
+//                    error.RemoveExtensions();
 
-                    error.WithCode("500");
-                    error.WithMessage(error.Exception?.InnerException?.Message ?? error?.Exception?.Message ?? "");
+//                    error.WithCode("500");
+//                    error.WithMessage(error.Exception?.InnerException?.Message ?? error?.Exception?.Message ?? "");
 
 
-                    return error;
-                });
+//                    return error;
+//                });
 
-#endregion
+//#endregion
 
 
 
@@ -99,6 +99,6 @@ app.UseCors(builder => builder
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
-app.MapGraphQL();
+//app.MapGraphQL();
 
 app.Run();
