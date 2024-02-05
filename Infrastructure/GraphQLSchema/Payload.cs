@@ -1,7 +1,7 @@
 ﻿
 using Domain.Entitites;
 
-namespace POSWEB.Server.GraphQLSchema
+namespace Infrastructure.GraphQLSchema
 {
     public record UpdateMutationPayload<T>(T? Data, bool IsSuccess = true, string Message = "") where T : struct;
     public record AddMutationPayload<T>(T? Data, bool IsSuccess = true, string Message = "") where T : struct;

@@ -1,6 +1,6 @@
 ﻿using Persistence.Context;
 
-namespace POSWEB.Server.GraphQLSchema
+namespace Infrastructure.GraphQLSchema
 {
     public class ProductCategoryPayloads
     {

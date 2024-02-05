@@ -16,13 +16,13 @@ namespace Infrastructure.Security.PolicyEnforcer
             return policy switch
             {
                 Policy.SelfOrAdmin => SelfOrAdminPolicy(request, currentUser),
-                _ => Error.Unexpected(description: "Unknown policy name"),
+                _ => ErrorOr.Error.Unexpected(description: "Unknown policy name"),
             };
         }
 
         private static ErrorOr<Success> SelfOrAdminPolicy(IAuthorizeableRequest request, CurrentUser currentUser) =>
             request.UserId == currentUser.Email //|| currentUser.Roles.Contains(Role.Admin)
                 ? Result.Success
-                : Error.Unauthorized(description: "Requesting user failed policy requirement");
+                : ErrorOr.Error.Unauthorized(description: "Requesting user failed policy requirement");
     }
 }

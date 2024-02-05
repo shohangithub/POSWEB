@@ -25,12 +25,12 @@ namespace Infrastructure.Security
 
             if (requiredPermissions.Except(currentUser.Permissions).Any())
             {
-                return Error.Unauthorized(description: "User is missing required permissions for taking this action");
+                return ErrorOr.Error.Unauthorized(description: "User is missing required permissions for taking this action");
             }
 
             if (requiredRoles.Except(currentUser.Roles).Any())
             {
-                return Error.Unauthorized(description: "User is missing required roles for taking this action");
+                return ErrorOr.Error.Unauthorized(description: "User is missing required roles for taking this action");
             }
 
             foreach (var policy in requiredPolicies)

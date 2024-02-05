@@ -1,9 +1,10 @@
 using POSWEB.Server;
 using Infrastructure;
 using POSWEB.Server.Middlewares;
-using POSWEB.Server.GraphQLSchema;
+using Infrastructure.GraphQLSchema;
 using Persistence;
 using Persistence.SeedData;
+using HotChocolate;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +22,32 @@ builder.Services.AddPresentation()
 
 builder.Services.AddGraphQLServer()
                 .AddQueryType<Query>()
-                .AddMutationType<Mutations>();
+                .AddMutationType<Mutations>()
+                .AddErrorFilter(error =>
+                {
+                    if (error.Exception is NullReferenceException)
+                    {
+                        return error.WithCode("NullRef");
+                    }
+
+                    if (error.Exception is DuplicateWaitObjectException)
+                    {
+                        return error.WithCode("NullRef");
+                    }
+
+                    //StatusCodes.Status500InternalServerError
+                   
+                    error.RemoveException();
+                    error.RemoveLocations();
+                    error.RemoveSyntaxNode();
+                    error.RemoveExtensions();
+
+                    error.WithCode("500");
+                    error.WithMessage(error.Exception?.InnerException?.Message ?? error?.Exception?.Message ?? "");
+
+
+                    return error;
+                });
 
 #endregion
 

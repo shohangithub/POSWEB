@@ -4,9 +4,9 @@ using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 using Persistence.Repositories;
-using static POSWEB.Server.GraphQLSchema.InputPayload;
+using static Infrastructure.GraphQLSchema.InputPayload;
 
-namespace POSWEB.Server.GraphQLSchema;
+namespace Infrastructure.GraphQLSchema;
 
 public class Mutations
 {
@@ -105,10 +105,17 @@ public class Mutations
     [GraphQLDescription($"Add User Information")]
     public async ValueTask<UserResponse> AddUserAsync(UserRequest input, [Service] IRepository<User, int> _repository, CancellationToken cancellationToken)
     {
-        var entity = input.Adapt<User>();
-        var result = await _repository.AddAsync(entity, cancellationToken);
+        //try
+        //{
+            var entity = input.Adapt<User>();
+            var result = await _repository.AddAsync(entity, cancellationToken);
 
-        return result ? entity.Adapt<UserResponse>() : input.Adapt<UserResponse>();
+            return result ? entity.Adapt<UserResponse>() : input.Adapt<UserResponse>();
+        //}
+        //catch (Exception ex)
+        //{
+        //    throw new Exception(ex.InnerException?.Message ?? ex.Message);
+        //}
     }
 
     [GraphQLDescription($"Update User Information")]
