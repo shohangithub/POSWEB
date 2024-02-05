@@ -30,9 +30,9 @@ public class UserService : IUserService<int>
 
     public async ValueTask<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
-       var existingData = await _repository.GetByIdAsync(id, cancellationToken);
+        var existingData = await _repository.GetByIdAsync(id, cancellationToken);
         if (existingData is null) throw new ArgumentNullException(nameof(existingData));
-       return await _repository.DeleteAsync(existingData, cancellationToken);
+        return await _repository.DeleteAsync(existingData, cancellationToken);
     }
 
     public async ValueTask<UserResponse> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
@@ -51,9 +51,10 @@ public class UserService : IUserService<int>
         return response;
     }
 
-    public ValueTask<IEnumerable<Lookup<int>>> GetLookup(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<Lookup<int>>> GetLookup(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var result = await _repository.Query().Where(predicate).Select(x => new Lookup<int>(x.Id, x.UserName)).ToListAsync();
+        return result;
     }
 
     public async ValueTask<TokenResponse> GetUserToken(string email, CancellationToken cancellationToken = default)

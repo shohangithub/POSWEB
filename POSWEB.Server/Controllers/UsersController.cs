@@ -1,12 +1,13 @@
 ﻿using Application.Common;
 using Domain.Enums;
+using System.Linq.Expressions;
 
 namespace POSWEB.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 //[ApiKey]
-
+[Infrastructure.Authentication.Permission(ERoles.Admin)]
 public class UsersController : ControllerBase
 {
     private readonly IUserService<int> _userService;
@@ -16,7 +17,6 @@ public class UsersController : ControllerBase
         _userService = userService;
     }
 
-    // GET: api/Users
     [HttpGet]
     public async Task<IEnumerable<UserListResponse>> GetUsers(CancellationToken cancellationToken)
     {
@@ -24,9 +24,17 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
+    [Route("Lookup")]
+    public async Task<IEnumerable<Lookup<int>>> GetLookup(CancellationToken cancellationToken)
+    {
+        Expression<Func<User, bool>> predicate = null;
+        return await _userService.GetLookup(predicate, cancellationToken);
+    }
+
+
+    [HttpGet]
     [Route("GetPageUsers")]
-    [Infrastructure.Authentication.Permission(ERoles.Admin)]
-    public async Task<PaginationResult<UserListResponse>> GetPageUsers([FromQuery]PaginationQuery requestQuery, CancellationToken cancellationToken)
+    public async Task<PaginationResult<UserListResponse>> GetPageUsers([FromQuery] PaginationQuery requestQuery, CancellationToken cancellationToken)
     {
         Console.WriteLine(requestQuery);
         return await _userService.PaginationListAsync(requestQuery, cancellationToken);
