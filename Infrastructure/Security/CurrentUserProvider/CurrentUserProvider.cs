@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Infrastructure.Authentication;
+using Microsoft.AspNetCore.Http;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace Infrastructure.Security.CurrentUserProvider;
 
@@ -10,14 +10,15 @@ public class CurrentUserProvider(IHttpContextAccessor _httpContextAccessor) : IC
     {
         //_httpContextAccessor.HttpContext.ThrowIfNull();
 
-        var id = Guid.Parse(GetSingleClaimValue("id"));
-        var permissions = GetClaimValues("permissions");
-        var roles = GetClaimValues(ClaimTypes.Role);
+        var id = int.Parse(GetSingleClaimValue(CustomClaims.Id)??"");
+        var tenantId = Guid.Parse(GetSingleClaimValue(CustomClaims.Tenant)??"");
         var firstName = GetSingleClaimValue(JwtRegisteredClaimNames.Name);
-        var lastName = GetSingleClaimValue(ClaimTypes.Surname);
-        var email = GetSingleClaimValue(ClaimTypes.Email);
+        var email = GetSingleClaimValue(JwtRegisteredClaimNames.Email);
+        var roles = GetClaimValues(CustomClaims.Role);
+        //var permissions = GetClaimValues("permissions");
+        //var lastName = GetSingleClaimValue(ClaimTypes.Surname);
 
-        return new CurrentUser(id, firstName, lastName, email, permissions, roles);
+        return new CurrentUser(id,tenantId, firstName, null, email, null, roles);
     }
 
     private List<string> GetClaimValues(string claimType) =>
@@ -26,8 +27,8 @@ public class CurrentUserProvider(IHttpContextAccessor _httpContextAccessor) : IC
             .Select(claim => claim.Value)
             .ToList();
 
-    private string GetSingleClaimValue(string claimType) =>
-        _httpContextAccessor.HttpContext!.User.Claims
-            .Single(claim => claim.Type == claimType)
-            .Value;
+    private string? GetSingleClaimValue(string claimType)=>
+        _httpContextAccessor.HttpContext!.User?.Claims?.FirstOrDefault(claim => claim.Type == claimType)?.Value;
+    
+
 }

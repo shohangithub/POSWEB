@@ -1,7 +1,8 @@
 ﻿namespace Infrastructure.Security.CurrentUserProvider;
 
 public record CurrentUser(
-    Guid Id,
+    int Id,
+    Guid TenantId,
     string FirstName,
     string LastName,
     string Email,
