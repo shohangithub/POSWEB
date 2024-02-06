@@ -17,6 +17,7 @@ using Infrastructure.Authentication;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Infrastructure.Authentication.TokenGenerator;
+using Infrastructure.Security.CurrentUserProvider;
 
 namespace Infrastructure;
 
@@ -73,6 +74,9 @@ public static class DependencyInjection
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddSingleton<IDateTimeProvider, SystemDateTimeProvider>();
+        services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
+
+        services.AddScoped<IUserTokenService, UserTokenService>();
         services.AddScoped<IUserService<int>, UserService>();
 
         return services;

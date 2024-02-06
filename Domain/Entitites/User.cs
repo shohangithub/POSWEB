@@ -18,6 +18,10 @@ public class User : BaseEntity<int>
     public ICollection<ProductCategory> ProductCategoriesCreated { get; set; } = [];
     public ICollection<ProductCategory> ProductCategoriesUpdated { get; set; } = [];
 
-    public ICollection<ProductUnit> ProductUnitsCreated { get; set; } = [];
-    public ICollection<ProductUnit> ProductUnitsUpdated { get; set; } = [];
+    public ICollection<BaseUnit> BaseUnitsCreated { get; set; } = [];
+    public ICollection<BaseUnit> BaseUnitsUpdated { get; set; } = [];
+
+    public ICollection<UnitConversion> UnitConversionsCreated { get; set; } = [];
+    public ICollection<UnitConversion> UnitConversionsUpdated { get; set; } = [];
+    
 }

@@ -1,6 +1,4 @@
-﻿using static System.Net.Mime.MediaTypeNames;
-
-namespace Domain.Entitites;
+﻿namespace Domain.Entitites;
 
 [Table("Products", Schema = "product")]
 public class Product : AuditableEntity<int>
@@ -27,7 +25,7 @@ public class Product : AuditableEntity<int>
     }
     public string CustomBarcode { get; set; } = string.Empty;
     public required ProductCategory ProductCategory { get; set; }
-    public required ProductUnit ProductUnit { get; set; }
+    public required int UnitId { get; set; }
     public required bool IsRawMaterial { get; set; }
     public required bool IsFinishedGoods { get; set; }
     public int? ReOrederLevel { get; set; }
