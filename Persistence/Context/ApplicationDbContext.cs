@@ -9,18 +9,16 @@ public class ApplicationDbContext : DbContext
 {
     private readonly TenantProvider _tenantProvider;
     private readonly Guid _tenantId;
-    private readonly string defaultTenantId = "11223344-5566-7788-99AA-BBCCDDEEFF00";
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, TenantProvider tenantProvider)
         : base(options)
     {
         _tenantProvider = tenantProvider;
-        var tenantId = _tenantProvider.GetTenantId();
-        _tenantId = tenantId == Guid.Empty ? new Guid(defaultTenantId) : tenantId;
+        _tenantId = _tenantProvider.GetTenantId();
     }
 
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductCategory> ProductCategories { get; set; }
-    public DbSet<ProductUnit> ProductUnits { get; set; }
+    public DbSet<BaseUnit> ProductUnits { get; set; }
     public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,8 +35,11 @@ public class ApplicationDbContext : DbContext
             entity.HasMany(x => x.ProductsCreated).WithOne(x => x.CreatedBy).HasForeignKey(x => x.CreatedById).IsRequired().OnDelete(DeleteBehavior.Restrict);
             entity.HasMany(x => x.ProductsUpdated).WithOne(x => x.LastUpdatedBy).HasForeignKey(x => x.LastUpdatedById).IsRequired(false).OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasMany(x => x.ProductUnitsCreated).WithOne(x => x.CreatedBy).HasForeignKey(x => x.CreatedById).IsRequired().OnDelete(DeleteBehavior.Restrict);
-            entity.HasMany(x => x.ProductUnitsUpdated).WithOne(x => x.LastUpdatedBy).HasForeignKey(x => x.LastUpdatedById).IsRequired(false).OnDelete(DeleteBehavior.Restrict);
+            entity.HasMany(x => x.BaseUnitsCreated).WithOne(x => x.CreatedBy).HasForeignKey(x => x.CreatedById).IsRequired().OnDelete(DeleteBehavior.Restrict);
+            entity.HasMany(x => x.BaseUnitsUpdated).WithOne(x => x.LastUpdatedBy).HasForeignKey(x => x.LastUpdatedById).IsRequired(false).OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasMany(x => x.UnitConversionsCreated).WithOne(x => x.CreatedBy).HasForeignKey(x => x.CreatedById).IsRequired().OnDelete(DeleteBehavior.Restrict);
+            entity.HasMany(x => x.UnitConversionsUpdated).WithOne(x => x.LastUpdatedBy).HasForeignKey(x => x.LastUpdatedById).IsRequired(false).OnDelete(DeleteBehavior.Restrict);
 
 
             entity.HasMany(x => x.ProductCategoriesCreated).WithOne(x => x.CreatedBy).HasForeignKey(x => x.CreatedById).IsRequired().OnDelete(DeleteBehavior.Restrict);

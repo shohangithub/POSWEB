@@ -24,8 +24,8 @@ public sealed class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
             new(JwtRegisteredClaimNames.Email, user.email),
             new(JwtRegisteredClaimNames.Name, user.firstName),
             new(JwtRegisteredClaimNames.FamilyName, user.lastName),
-            new(JwtRegisteredClaimNames.Email, user.email),
             new(CustomClaims.Id, user.id.ToString()),
+            new(CustomClaims.Tenant, user.tenantId.ToString()),
         };
 
         user.roles?.ForEach(role => claims.Add(new(CustomClaims.Role, role.ToString())));

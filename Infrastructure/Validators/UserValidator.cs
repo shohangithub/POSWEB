@@ -1,17 +1,16 @@
-﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Infrastructure.Validators;
 
-namespace Infrastructure.Validators
+internal class UserValidator : AbstractValidator<UserRequest>
 {
-    internal class UserValidator : AbstractValidator<UserRequest>
+    public UserValidator(IRepository<User, int> repository)
     {
-        public UserValidator()
-        {
-            RuleFor(cmd => cmd.UserName).NotNull().MinimumLength(3);
-        }
+        RuleFor(cmd => cmd.UserName).NotNull().MinimumLength(3);
+        RuleFor(cmd => cmd.Email).NotNull().EmailAddress()
+            .MustAsync(async (email, cancellation) =>
+                {
+                    return !await repository.Query().AnyAsync(q => q.Email == email);
+                })
+            .WithMessage("Email Address must be unique");
     }
+
 }

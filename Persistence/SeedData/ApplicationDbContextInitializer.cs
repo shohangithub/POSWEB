@@ -1,4 +1,6 @@
-﻿namespace Persistence.SeedData;
+﻿using Microsoft.Extensions.Configuration;
+
+namespace Persistence.SeedData;
 
 public static class InitialiserExtensions
 {
@@ -18,11 +20,13 @@ public class ApplicationDbContextInitializer
 {
     private readonly ILogger<ApplicationDbContextInitializer> _logger;
     private readonly ApplicationDbContext _context;
+    private readonly IConfiguration _configuration;
 
-    public ApplicationDbContextInitializer(ILogger<ApplicationDbContextInitializer> logger, ApplicationDbContext context)
+    public ApplicationDbContextInitializer(ILogger<ApplicationDbContextInitializer> logger, ApplicationDbContext context, IConfiguration configuration)
     {
         _logger = logger;
         _context = context;
+        _configuration = configuration;
     }
 
     public async Task InitializeAsync()
@@ -56,7 +60,9 @@ public class ApplicationDbContextInitializer
         // Default data
         // Seed, if necessary
 
-        var defaultTenantId = new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00");
+        var defaultTenantId = _configuration.GetSection("DefaultTenant:TenantId").Get<string>();
+        var tenantId = new Guid(defaultTenantId);
+
         if (!_context.Users.Any())
         {
             _context.Users.Add(new User
@@ -65,7 +71,7 @@ public class ApplicationDbContextInitializer
                 Email = "ris.shohan@gmail.com",
                 IsActive = true,
                 Role = ERoles.MasterAdmin,
-                TenantId = defaultTenantId
+                TenantId = tenantId
             });
 
             await _context.SaveChangesAsync();

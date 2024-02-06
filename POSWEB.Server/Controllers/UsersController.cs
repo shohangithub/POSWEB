@@ -1,5 +1,4 @@
-﻿using Application.Common;
-using Domain.Enums;
+﻿using Domain.Enums;
 using System.Linq.Expressions;
 
 namespace POSWEB.Server.Controllers;
@@ -33,10 +32,9 @@ public class UsersController : ControllerBase
 
 
     [HttpGet]
-    [Route("GetPageUsers")]
-    public async Task<PaginationResult<UserListResponse>> GetPageUsers([FromQuery] PaginationQuery requestQuery, CancellationToken cancellationToken)
+    [Route("GetWithPagination")]
+    public async Task<PaginationResult<UserListResponse>> GetWithPagination([FromQuery] PaginationQuery requestQuery, CancellationToken cancellationToken)
     {
-        Console.WriteLine(requestQuery);
         return await _userService.PaginationListAsync(requestQuery, cancellationToken);
     }
 
@@ -55,7 +53,6 @@ public class UsersController : ControllerBase
     }
 
     // PUT: api/Users/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
     public async Task<ActionResult<UserResponse>> PutUser(int id, UserRequest user)
     {
@@ -79,19 +76,19 @@ public class UsersController : ControllerBase
             return BadRequest(ModelState);
         }
     }
+     
     // POST: api/Users
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
     public async Task<ActionResult<UserResponse>> PostUser(UserRequest user, CancellationToken cancellationToken)
     {
-        return await _userService.AddAsync(user, cancellationToken); ;
+        return await _userService.AddAsync(user, cancellationToken);
     }
 
     // DELETE: api/Users/5
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUser(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<bool>> DeleteUser(int id, CancellationToken cancellationToken)
     {
-        return NoContent();
+        return await _userService.DeleteAsync(id, cancellationToken);
     }
 
     private async ValueTask<bool> UserExists(int id, CancellationToken cancellationToken)

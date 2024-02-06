@@ -1,28 +1,29 @@
 ﻿using Domain.Enums;
 using Infrastructure.Authentication;
 using Infrastructure.Authentication.TokenGenerator;
+using Infrastructure.Security.CurrentUserProvider;
 using Infrastructure.Validators;
+using Persistence.Repositories;
 
 namespace Infrastructure.Services;
 
 public class UserService : IUserService<int>
 {
     private readonly IRepository<User, int> _repository;
-    // private readonly IJwtTokenGenerator _jwtTokenGenerator;
-    private readonly IJwtProvider _jwtProvider;
-    public UserService(IRepository<User, int> repository, IJwtProvider jwtProvider)
+    private readonly CurrentUser _currentUser;
+    public UserService(IRepository<User, int> repository, ICurrentUserProvider currentUserProvider)
     {
         _repository = repository;
-        _jwtProvider = jwtProvider;
-        //_jwtTokenGenerator = jwtTokenGenerator;
+        _currentUser = currentUserProvider.GetCurrentUser();
     }
 
     public async ValueTask<UserResponse> AddAsync(UserRequest user, CancellationToken cancellationToken = default)
     {
-        UserValidator validator = new();
+        UserValidator validator = new(_repository);
         await validator.ValidateAndThrowAsync(user, cancellationToken);
 
         var entity = user.Adapt<User>();
+        entity.TenantId = _currentUser.TenantId;
         var result = await _repository.AddAsync(entity, cancellationToken);
         var response = result ? entity.Adapt<UserResponse>() : null;
         return response;
@@ -55,22 +56,6 @@ public class UserService : IUserService<int>
     {
         var result = await _repository.Query().Where(predicate).Select(x => new Lookup<int>(x.Id, x.UserName)).ToListAsync();
         return result;
-    }
-
-    public async ValueTask<TokenResponse> GetUserToken(string email, CancellationToken cancellationToken = default)
-    {
-        var user = await GetByEmailAsync(email, cancellationToken);
-        if (user is null) throw new Exception("User not found !");
-
-        var token = _jwtProvider.Generate(new TokenUser(
-            id: user.Id,
-            email: user.Email,
-            firstName: user.UserName,
-            lastName: user.UserName,
-            roles: [ERoles.Admin, ERoles.Admin, ERoles.Standard],
-            permissions: null
-            ));
-        return new TokenResponse(token, user.Email, user.UserName, user.UserName);
     }
 
     public async ValueTask<bool> IsExistsAsync(int id, CancellationToken cancellationToken = default)
