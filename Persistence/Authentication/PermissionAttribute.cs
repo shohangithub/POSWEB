@@ -1,7 +1,7 @@
 ﻿using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Infrastructure.Authentication;
+namespace Persistence.Authentication;
 
 public class PermissionAttribute(ERoles roles) : AuthorizeAttribute(roles.ToString()) //roles use as policy
 {

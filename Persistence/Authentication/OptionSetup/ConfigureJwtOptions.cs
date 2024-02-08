@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
-namespace Infrastructure.Authentication.OptionSetup;
+namespace Persistence.Authentication.OptionSetup;
 
 public class ConfigureJwtOptions(IConfiguration configuration) : IConfigureOptions<JwtOptions>
 {

@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Security.CurrentUserProvider;
+﻿namespace Persistence.Authentication.CurrentUserContext;
 
 public interface ICurrentUserProvider
 {

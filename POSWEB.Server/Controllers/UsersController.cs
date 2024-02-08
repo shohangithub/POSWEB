@@ -1,12 +1,9 @@
-﻿using Domain.Enums;
-using System.Linq.Expressions;
-
-namespace POSWEB.Server.Controllers;
+﻿namespace POSWEB.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 //[ApiKey]
-[Infrastructure.Authentication.Permission(ERoles.Admin)]
+[Permission(ERoles.Admin)]
 public class UsersController : ControllerBase
 {
     private readonly IUserService<int> _userService;

@@ -1,7 +1,7 @@
 ﻿using Application.Common;
 using Application.Contractors.Common.Security;
 using ErrorOr;
-using Infrastructure.Security.CurrentUserProvider;
+using Persistence.Authentication.CurrentUserContext;
 
 
 namespace Infrastructure.Security.PolicyEnforcer

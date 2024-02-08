@@ -1,6 +1,6 @@
 ﻿using Domain.Enums;
-using Infrastructure.Authentication;
-using Infrastructure.Authentication.TokenGenerator;
+using Persistence.Authentication;
+using Persistence.Authentication.TokenGenerator;
 
 namespace Infrastructure.Services;
 

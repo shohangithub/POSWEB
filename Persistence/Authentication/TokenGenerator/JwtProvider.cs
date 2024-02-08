@@ -1,12 +1,10 @@
-﻿using FluentEmail.Core;
-using Infrastructure.Security.TokenGenerator;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Infrastructure.Authentication.TokenGenerator;
+namespace Persistence.Authentication.TokenGenerator;
 
 public sealed class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
 {

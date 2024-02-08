@@ -1,9 +1,6 @@
-﻿using Domain.Enums;
-using Infrastructure.Authentication;
-using Infrastructure.Authentication.TokenGenerator;
-using Infrastructure.Security.CurrentUserProvider;
-using Infrastructure.Validators;
-using Persistence.Repositories;
+﻿
+
+using Persistence.Authentication.CurrentUserContext;
 
 namespace Infrastructure.Services;
 

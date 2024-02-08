@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.Data;
-
-namespace POSWEB.Server.Controllers;
+﻿namespace POSWEB.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

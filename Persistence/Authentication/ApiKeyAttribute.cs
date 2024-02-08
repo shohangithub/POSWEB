@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infrastructure.Authentication;
+namespace Persistence.Authentication;
 
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
 public class ApiKeyAttribute : Attribute, IAuthorizationFilter

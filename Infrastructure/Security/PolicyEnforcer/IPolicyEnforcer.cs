@@ -1,7 +1,6 @@
 ﻿using Application.Common;
 using ErrorOr;
-using Infrastructure.Security.CurrentUserProvider;
-
+using Persistence.Authentication.CurrentUserContext;
 namespace Infrastructure.Security.PolicyEnforcer;
 
 public interface IPolicyEnforcer

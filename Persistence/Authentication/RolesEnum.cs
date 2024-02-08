@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Authentication
+﻿namespace Persistence.Authentication
 {
     public enum Roles
     {

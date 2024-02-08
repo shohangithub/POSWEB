@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Authentication.TokenGenerator;
+﻿namespace Persistence.Authentication.TokenGenerator;
 
 public interface IJwtProvider
 {
