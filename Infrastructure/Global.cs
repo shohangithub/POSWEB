@@ -10,3 +10,4 @@ global using Persistence.Context;
 global using Persistence.Repositories;
 global using Application.Framework;
 global using FluentValidation;
+global using Infrastructure.Validators;
