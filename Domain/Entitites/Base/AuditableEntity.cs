@@ -2,7 +2,7 @@
 
 public abstract class AuditableEntity<T> : BaseEntity<T>
 {
-    public required int CreatedById { get; set; }
+    public int CreatedById { get; set; }
     public User? CreatedBy { get; set; }
     [Column(TypeName = "datetime")]
     public DateTime CreatedTime { get; set; } = DateTime.Now;

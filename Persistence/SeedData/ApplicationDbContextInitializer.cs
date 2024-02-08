@@ -76,5 +76,22 @@ public class ApplicationDbContextInitializer
 
             await _context.SaveChangesAsync();
         }
+        var userId = _context.Users.Select(x => x.Id).FirstOrDefault();
+        var actionDateTime = DateTime.Now;
+
+
+        if (!_context.ProductCategories.Any())
+        {
+            _context.ProductCategories.Add(new ProductCategory
+            {
+                CategoryName = "General",
+                CreatedById = userId,
+                IsActive = true,
+                Description = "It's a general category",
+                TenantId = tenantId
+
+            });
+            await _context.SaveChangesAsync();
+        }
     }
 }

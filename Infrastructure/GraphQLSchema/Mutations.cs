@@ -21,7 +21,8 @@ public class Mutations
                 CategoryName = input.CategoryName,
                 Description = input.Description,
                 IsActive = input.IsActive,
-                CreatedTime = DateTime.Now
+                CreatedTime = DateTime.Now,
+                TenantId = Guid.Empty
             };
             await context.AddAsync(entity);
             await context.SaveChangesAsync(cancellationToken);

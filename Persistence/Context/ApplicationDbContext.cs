@@ -2,6 +2,7 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Tenant;
+using Persistence.Authentication.CurrentUserContext;
 
 namespace Persistence.Context;
 
@@ -9,16 +10,20 @@ public class ApplicationDbContext : DbContext
 {
     private readonly TenantProvider _tenantProvider;
     private readonly Guid _tenantId;
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, TenantProvider tenantProvider)
+    private readonly CurrentUser _currentUser;
+
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, TenantProvider tenantProvider, ICurrentUserProvider currentUserProvider)
         : base(options)
     {
         _tenantProvider = tenantProvider;
         _tenantId = _tenantProvider.GetTenantId();
+        _currentUser = currentUserProvider.GetCurrentUser();
     }
 
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductCategory> ProductCategories { get; set; }
     public DbSet<BaseUnit> ProductUnits { get; set; }
+    public DbSet<UnitConversion> UnitConversions { get; set; }
     public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -45,6 +50,18 @@ public class ApplicationDbContext : DbContext
             entity.HasMany(x => x.ProductCategoriesCreated).WithOne(x => x.CreatedBy).HasForeignKey(x => x.CreatedById).IsRequired().OnDelete(DeleteBehavior.Restrict);
             entity.HasMany(x => x.ProductCategoriesUpdated).WithOne(x => x.LastUpdatedBy).HasForeignKey(x => x.LastUpdatedById).IsRequired(false).OnDelete(DeleteBehavior.Restrict);
 
+        });
+
+        modelBuilder.Entity<BaseUnit>(entity =>
+        {
+            entity.HasIndex(x => x.TenantId);
+            entity.HasQueryFilter(x => x.TenantId == _tenantId);
+        });
+
+        modelBuilder.Entity<ProductCategory>(entity =>
+        {
+            entity.HasIndex(x => x.TenantId);
+            entity.HasQueryFilter(x => x.TenantId == _tenantId);
         });
 
         //    modelBuilder.Entity<User>().HasMany(e => e.Products).WithOne(x => x.CreatedBy).HasForeignKey("UserId").IsRequired(true);

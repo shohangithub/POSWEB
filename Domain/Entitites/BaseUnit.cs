@@ -8,4 +8,7 @@ public class BaseUnit : AuditableEntity<int>
     public required bool IsActive { get; set; }
     [NotMapped]
     public string Status => IsActive ? "Active" : "Inactive";
+
+
+    public ICollection<UnitConversion> UnitConversions { get; set; } = [];
 }
