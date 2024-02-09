@@ -55,8 +55,9 @@ public class ProductCategoryService : IProductCategoryService
         ProductCategoryValidator validator = new(_repository, id);
         await validator.ValidateAndThrowAsync(user, cancellationToken);
 
+        var existingData = await _repository.GetByIdAsync(id, cancellationToken);
+        var entity = user.Adapt(existingData);
 
-        var entity = user.Adapt<ProductCategory>();
         _defaultValueInjector.InjectUpdatingAudit<ProductCategory,short>(entity);
         var result = await _repository.UpdateAsync(entity, cancellationToken);
         if (result is null) return null;
