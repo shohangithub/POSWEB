@@ -44,9 +44,12 @@ public class Repository<TEntity, KeyType>(ApplicationDbContext _context) : IRepo
         return result > 0 ? entity : null;
     }
 
+    public IQueryable<TEntity> UpdatableQuery(Expression<Func<TEntity,bool>> expression) => _context.Set<TEntity>().Where(expression);
+    
+
     private Dictionary<string, object?> GetUpdatingProperties(dynamic dynamicObject)
     {
-
+     
         return new Dictionary<string, object?>();
         //{
         //    { FieldName1, FieldValue2 },

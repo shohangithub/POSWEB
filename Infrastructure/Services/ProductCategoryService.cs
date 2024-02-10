@@ -2,7 +2,6 @@
 
 
 using Infrastructure.Services.Common;
-
 namespace Infrastructure.Services;
 
 public class ProductCategoryService : IProductCategoryService
@@ -58,7 +57,7 @@ public class ProductCategoryService : IProductCategoryService
         var existingData = await _repository.GetByIdAsync(id, cancellationToken);
         var entity = user.Adapt(existingData);
 
-        _defaultValueInjector.InjectUpdatingAudit<ProductCategory,short>(entity);
+        _defaultValueInjector.InjectUpdatingAudit<ProductCategory, short>(entity);
         var result = await _repository.UpdateAsync(entity, cancellationToken);
         if (result is null) return null;
 
@@ -67,6 +66,20 @@ public class ProductCategoryService : IProductCategoryService
         return response;
     }
 
+    public async ValueTask<ProductCategoryResponse> ExecuteUpdateAsync(short id, ProductCategoryRequest user, CancellationToken cancellationToken = default)
+    {
+        ProductCategoryValidator validator = new(_repository, id);
+        await validator.ValidateAndThrowAsync(user, cancellationToken);
+
+        _repository.UpdatableQuery(x => x.Id == id).ExecuteUpdate(setters =>
+        setters.SetProperty(cmd => cmd.CategoryName, user.CategoryName)
+               .SetProperty(cmd => cmd.Description, user.Description)
+               .SetProperty(cmd => cmd.IsActive, user.IsActive)
+        );
+
+        var response = user.Adapt<ProductCategoryResponse>();
+        return response;
+    }
 
     public async ValueTask<IEnumerable<ProductCategoryListResponse>> ListAsync(CancellationToken cancellationToken = default)
     {

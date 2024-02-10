@@ -12,6 +12,7 @@ public interface IRepository<TEntity, KeyType>
     ValueTask<bool> AddAsync(TEntity entity, CancellationToken cancellationToken);
     ValueTask<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken);
     ValueTask UpdateExecuteAsync(Expression<Func<SetPropertyCalls<User>, SetPropertyCalls<User>>> props, CancellationToken cancellationToken = default);
+    IQueryable<TEntity?> UpdatableQuery(Expression<Func<TEntity, bool>> expression);
     ValueTask<TEntity?> UpdatePatchAsync(int id, JsonPatchDocument<TEntity> patchDocument, CancellationToken cancellationToken = default);
     ValueTask<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken);
     void Delete(params TEntity[] entities);
